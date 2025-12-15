@@ -38,6 +38,7 @@ window.addEventListener('DOMContentLoaded', async () => {
 
         // SMART DATA CLEANING
         gitaData = rawData.map(item => {
+            // Clean Sanskrit
             let cleanSanskrit = (item.text || item.shloka || item.sanskrit || "")
                 .replace(/\n/g, " ")       
                 .replace(/[0-9.|]+$/g, '') 
@@ -47,6 +48,7 @@ window.addEventListener('DOMContentLoaded', async () => {
                 cleanSanskrit += " ।।";
             }
 
+            // Determine English (Fallbacks included)
             let rawEnglish = item.translation || 
                              item.meaning || 
                              item.english_meaning || 
@@ -64,6 +66,7 @@ window.addEventListener('DOMContentLoaded', async () => {
             };
         });
 
+        // Sort Data
         gitaData.sort((a, b) => {
             if (a.chapter === b.chapter) return a.verse - b.verse;
             return a.chapter - b.chapter;
@@ -101,8 +104,12 @@ function switchView(viewName) {
     views[viewName].classList.remove('hidden');
     
     document.querySelectorAll('.nav-link').forEach(el => el.classList.remove('active'));
-    if (viewName === 'home') document.getElementById('btn-home').classList.add('active');
-    else document.getElementById('btn-chapters').classList.add('active');
+    if (viewName === 'home') {
+        document.getElementById('btn-home').classList.add('active');
+        if (gitaData.length > 0) showRandomVerse(); // Shuffle on Home click
+    } else {
+        document.getElementById('btn-chapters').classList.add('active');
+    }
 
     window.scrollTo(0, 0);
     fadeContent();
@@ -112,6 +119,7 @@ function fadeContent() {
     const main = document.querySelector('main:not(.hidden)');
     main.style.opacity = '0';
     main.style.transform = 'translateY(10px)';
+    main.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
     
     setTimeout(() => {
         main.style.opacity = '1';
@@ -144,9 +152,9 @@ function renderChapterList() {
         const card = document.createElement('div');
         card.className = 'chapter-card';
         card.innerHTML = `
-            <div style="font-size: 0.75rem; color: #B45309; font-weight: 700; text-transform: uppercase; margin-bottom: 0.5rem;">Chapter ${i}</div>
+            <div style="font-size: 0.8rem; color: #B45309; font-weight: 700; text-transform: uppercase; margin-bottom: 0.5rem;">Chapter ${i}</div>
             <h3 style="margin-bottom: 0.5rem;">${chapterTitlesSanskrit[i - 1]}</h3>
-            <p style="font-family:'Playfair Display'; font-size:1rem; font-style:italic; color:#666;">${chapterTitlesEnglish[i - 1]}</p>
+            <p>${chapterTitlesEnglish[i - 1]}</p>
         `;
         card.onclick = () => openChapter(i);
         grid.appendChild(card);
@@ -159,9 +167,9 @@ function openChapter(chapterNum) {
     
     container.innerHTML = `
         <div style="text-align:center; margin-bottom: 4rem; border-bottom: 1px solid #eee; padding-bottom: 2rem;">
-            <span style="color: #B45309; font-weight: bold; text-transform: uppercase; font-size: 0.8rem;">Chapter ${chapterNum}</span>
-            <h2 style="font-family: 'Playfair Display', serif; font-size: 2.5rem; margin-bottom: 0.5rem;">${chapterTitlesSanskrit[chapterNum - 1]}</h2>
-            <p style="color: #666; font-family: 'Playfair Display'; font-style:italic;">${chapterTitlesEnglish[chapterNum - 1]}</p>
+            <span style="color: #B45309; font-weight: bold; text-transform: uppercase; font-size: 0.9rem;">Chapter ${chapterNum}</span>
+            <h2 style="font-size: 2.5rem; margin-bottom: 0.5rem;">${chapterTitlesSanskrit[chapterNum - 1]}</h2>
+            <p style="color: #666; font-style:italic;">${chapterTitlesEnglish[chapterNum - 1]}</p>
         </div>
     `;
 
@@ -169,9 +177,9 @@ function openChapter(chapterNum) {
         const div = document.createElement('div');
         div.className = 'verse-block';
         div.innerHTML = `
-            <span style="display:inline-block; background: #F3F4F6; color: #374151; font-weight: 600; font-size: 0.75rem; padding: 4px 12px; border-radius: 99px; margin-bottom: 1.5rem;">Verse ${v.verse}</span>
-            <p style="font-family: 'Playfair Display', serif; font-size: 1.6rem; line-height: 1.8; margin-bottom: 1.5rem; color: #111;">${v.sanskrit}</p>
-            <p style="font-family: 'Playfair Display', serif; font-size: 1.15rem; color: #555; line-height: 1.8;">${v.translation}</p>
+            <span style="display:inline-block; background: #F3F4F6; color: #374151; font-weight: 700; font-size: 0.8rem; padding: 4px 12px; border-radius: 99px; margin-bottom: 1.5rem;">Verse ${v.verse}</span>
+            <p style="font-size: 1.8rem; line-height: 1.8; margin-bottom: 1.5rem; color: #111;">${v.sanskrit}</p>
+            <p style="font-size: 1.3rem; color: #555; line-height: 1.8; font-style:italic;">${v.translation}</p>
         `;
         container.appendChild(div);
     });

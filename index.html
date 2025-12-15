@@ -1,16 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bhagavad Gita</title>
+    <title>The Gita</title>
     <link rel="stylesheet" href="style.css">
+    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap" rel="stylesheet">
 </head>
-
 <body>
 
     <nav>
@@ -23,14 +22,15 @@
 
     <main id="view-home" class="container">
         <div class="verse-card">
-            <div id="loading" style="color:var(--text-secondary); font-style:italic; margin-bottom:1rem;">Loading wisdom...</div>
-
+            <div id="loading" style="color:var(--text-secondary); font-style:italic;">Loading wisdom...</div>
+            
             <div id="verse-content" class="hidden">
-                <div class="verse-meta" style="margin-bottom: 2rem;">
+                <div class="verse-meta" style="margin-bottom: 2.5rem;">
                     <span id="verse-reference"></span>
                 </div>
 
                 <h1 id="sanskrit-text"></h1>
+                
                 <p id="translation-text"></p>
             </div>
         </div>
@@ -53,5 +53,4 @@
 
     <script src="script.js"></script>
 </body>
-
 </html>

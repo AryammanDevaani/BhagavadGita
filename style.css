@@ -7,26 +7,30 @@
     --accent-gold: #B45309;     /* Deep Saffron */
     --accent-light: #FFF7ED;    /* Light Cream */
     
-    /* UNIFIED TYPOGRAPHY: All set to Playfair Display */
-    --font-ui: 'Playfair Display', serif;
-    --font-heading: 'Playfair Display', serif;
-    --font-body: 'Playfair Display', serif;
+    /* UNIFIED TYPOGRAPHY */
+    --font-main: 'Playfair Display', serif;
     
     /* Premium Shadows */
     --shadow-soft: 0 10px 40px -10px rgba(0,0,0,0.08);
     --shadow-hover: 0 20px 50px -10px rgba(0,0,0,0.12);
 }
 
-/* HIDE SCROLLBAR */
-html { scrollbar-width: none; -ms-overflow-style: none; }
-body::-webkit-scrollbar { display: none; }
+/* HIDE SCROLLBAR (But allow scrolling) */
+html {
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none;  /* IE */
+}
+body::-webkit-scrollbar { 
+    display: none; /* Chrome/Safari */
+}
 
+/* GLOBAL RESET */
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
 body {
     background-color: var(--bg-color);
     color: var(--text-primary);
-    font-family: var(--font-ui);
+    font-family: var(--font-main);
     -webkit-font-smoothing: antialiased;
     min-height: 100vh;
     display: flex;
@@ -46,9 +50,8 @@ nav {
 }
 
 .logo {
-    font-family: var(--font-heading);
     font-weight: 700;
-    font-size: 1.4rem; 
+    font-size: 1.4rem;
     letter-spacing: 0.05em;
     color: var(--text-primary);
 }
@@ -57,11 +60,11 @@ nav {
     background: none;
     border: none;
     cursor: pointer;
-    font-family: var(--font-ui);
+    font-family: var(--font-main);
     color: var(--text-secondary);
-    font-size: 1rem; 
-    font-weight: 500;
-    font-style: italic; 
+    font-size: 1rem;
+    font-weight: 600;
+    font-style: italic;
     letter-spacing: 0.02em;
     padding: 0.5rem 0;
     transition: all 0.3s ease;
@@ -91,43 +94,40 @@ nav {
     text-align: center;
     position: relative;
     width: 100%;
+    padding: 1rem;
 }
 
 #verse-content {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 2rem;
 }
 
 #verse-reference {
     background-color: var(--accent-light);
     color: var(--accent-gold);
-    font-family: var(--font-ui);
     padding: 0.6rem 1.5rem;
     border-radius: 100px;
-    font-size: 0.85rem;
-    font-weight: 600;
+    font-size: 0.9rem;
+    font-weight: 700;
     font-style: italic;
     border: 1px solid rgba(180, 83, 9, 0.1);
-    margin-bottom: 1rem;
 }
 
 #sanskrit-text {
-    font-family: var(--font-heading);
-    font-size: 2.2rem;
+    font-size: 2.4rem;
     line-height: 1.6;
     color: var(--text-primary);
     font-weight: 700;
     max-width: 800px;
+    margin-bottom: 2rem;
 }
 
 #translation-text {
-    font-family: var(--font-body);
-    font-size: 1.3rem;
+    font-size: 1.4rem;
     color: var(--text-secondary);
     line-height: 1.8;
-    max-width: 650px;
+    max-width: 700px;
     font-style: italic;
 }
 
@@ -156,19 +156,17 @@ nav {
 
 .chapter-card:hover {
     transform: translateY(-8px);
-    box-shadow: 0 20px 50px -10px rgba(0,0,0,0.12);
+    box-shadow: var(--shadow-hover);
     border-color: var(--accent-light);
 }
 
 .chapter-card h3 {
-    font-family: var(--font-heading);
     font-size: 1.5rem;
     margin: 0.5rem 0;
     color: var(--text-primary);
 }
 
 .chapter-card p {
-    font-family: var(--font-ui);
     font-style: italic;
     color: var(--text-secondary);
 }
@@ -178,8 +176,8 @@ nav {
     background: none;
     border: none;
     color: var(--text-secondary);
-    font-family: var(--font-ui);
-    font-size: 1rem;
+    font-family: var(--font-main);
+    font-size: 1.1rem;
     font-style: italic;
     cursor: pointer;
     margin-bottom: 3rem;
@@ -194,17 +192,18 @@ nav {
     padding-bottom: 4rem;
     border-bottom: 1px solid rgba(0,0,0,0.05);
     text-align: center;
-    max-width: 700px;
+    max-width: 750px;
     margin: 0 auto;
 }
 
 .verse-block:last-child { border-bottom: none; }
 
+/* Utilities */
 .hidden { display: none !important; }
 
 @media (max-width: 768px) {
-    #sanskrit-text { font-size: 1.6rem; }
+    #sanskrit-text { font-size: 1.8rem; }
     nav { justify-content: center; gap: 1rem; flex-direction: column; }
     .logo { margin-bottom: 0.5rem; }
-    .container { padding: 1rem; }
+    .container { padding: 1.5rem; }
 }
