@@ -1,0 +1,161 @@
+:root {
+    --bg-color: #FDFBF7;       /* Creamy white */
+    --text-primary: #1F2937;   /* Dark Grey */
+    --text-secondary: #6B7280; /* Light Grey */
+    --accent: #C2410C;         /* Muted Orange */
+    --font-ui: 'Inter', sans-serif;
+    --font-reading: 'Merriweather', serif;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-primary);
+    font-family: var(--font-ui);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Navigation */
+nav {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    padding: 2rem;
+    align-items: center;
+}
+
+.logo {
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    font-size: 0.9rem;
+    position: absolute;
+    left: 2rem;
+    top: 2.2rem;
+}
+
+.nav-link {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-family: var(--font-ui);
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    padding-bottom: 2px;
+}
+
+.nav-link.active {
+    color: var(--text-primary);
+    border-bottom: 1px solid var(--accent);
+}
+
+/* Main Container */
+.container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    max-width: 800px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+/* Home View - Verse Card */
+.verse-card {
+    text-align: center;
+    max-width: 600px;
+}
+
+#sanskrit-text {
+    font-family: var(--font-reading);
+    font-size: 2rem;
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+    font-weight: 400;
+}
+
+#translation-text {
+    font-family: var(--font-reading);
+    font-size: 1.1rem;
+    color: var(--text-secondary);
+    line-height: 1.8;
+    font-style: italic;
+    margin-bottom: 2rem;
+}
+
+.verse-meta {
+    margin-bottom: 3rem;
+}
+
+#verse-reference {
+    background-color: #F3F4F6;
+    color: var(--accent);
+    padding: 0.5rem 1rem;
+    border-radius: 50px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+}
+
+/* Buttons */
+.btn-primary {
+    background-color: transparent;
+    border: 1px solid #E5E7EB;
+    padding: 0.8rem 2rem;
+    border-radius: 50px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    transition: all 0.2s;
+}
+
+.btn-primary:hover {
+    border-color: var(--text-primary);
+    background-color: var(--text-primary);
+    color: white;
+}
+
+.btn-text {
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    cursor: pointer;
+    margin-bottom: 2rem;
+    align-self: flex-start;
+}
+
+/* Chapter Grid */
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1.5rem;
+    width: 100%;
+}
+
+.chapter-card {
+    background: white;
+    padding: 1.5rem;
+    border: 1px solid #F3F4F6;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.chapter-card:hover {
+    transform: translateY(-2px);
+    border-color: #E5E7EB;
+}
+
+/* Utilities */
+.hidden { display: none !important; }
+@media (max-width: 768px) {
+    .logo { position: static; margin-bottom: 1rem; }
+    nav { flex-direction: column; gap: 1rem; padding: 1rem; }
+    #sanskrit-text { font-size: 1.5rem; }
+}
