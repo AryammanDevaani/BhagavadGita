@@ -40,22 +40,22 @@ window.addEventListener('DOMContentLoaded', async () => {
         gitaData = rawData.map(item => {
             // Clean Sanskrit
             let cleanSanskrit = (item.text || item.shloka || item.sanskrit || "")
-                .replace(/\n/g, " ")       
-                .replace(/[0-9.|]+$/g, '') 
+                .replace(/\n/g, " ")
+                .replace(/[0-9.|]+$/g, '')
                 .trim();
-            
-            if(cleanSanskrit && !cleanSanskrit.endsWith("।") && !cleanSanskrit.endsWith("॥")) {
+
+            if (cleanSanskrit && !cleanSanskrit.endsWith("।") && !cleanSanskrit.endsWith("॥")) {
                 cleanSanskrit += " ।।";
             }
 
             // Determine English (Fallbacks included)
-            let rawEnglish = item.translation || 
-                             item.meaning || 
-                             item.english_meaning || 
-                             item.transliteration || 
-                             item.word_meanings || 
-                             "Meaning unavailable.";
-                             
+            let rawEnglish = item.translation ||
+                item.meaning ||
+                item.english_meaning ||
+                item.transliteration ||
+                item.word_meanings ||
+                "Meaning unavailable.";
+
             let cleanEnglish = rawEnglish.replace(/\n/g, " ").trim();
 
             return {
@@ -102,7 +102,7 @@ document.getElementById('btn-back').addEventListener('click', () => switchView('
 function switchView(viewName) {
     Object.values(views).forEach(el => el.classList.add('hidden'));
     views[viewName].classList.remove('hidden');
-    
+
     document.querySelectorAll('.nav-link').forEach(el => el.classList.remove('active'));
     if (viewName === 'home') {
         document.getElementById('btn-home').classList.add('active');
@@ -120,7 +120,7 @@ function fadeContent() {
     main.style.opacity = '0';
     main.style.transform = 'translateY(10px)';
     main.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
-    
+
     setTimeout(() => {
         main.style.opacity = '1';
         main.style.transform = 'translateY(0)';
@@ -138,7 +138,7 @@ function showRandomVerse() {
 
     document.getElementById('loading').classList.add('hidden');
     document.getElementById('verse-content').classList.remove('hidden');
-    
+
     document.getElementById('sanskrit-text').textContent = verse.sanskrit;
     document.getElementById('translation-text').textContent = verse.translation;
     document.getElementById('verse-reference').textContent = `Chapter ${verse.chapter} • Verse ${verse.verse}`;
@@ -146,7 +146,7 @@ function showRandomVerse() {
 
 function renderChapterList() {
     const grid = document.getElementById('chapter-grid');
-    grid.innerHTML = ''; 
+    grid.innerHTML = '';
 
     for (let i = 1; i <= 18; i++) {
         const card = document.createElement('div');
@@ -164,7 +164,7 @@ function renderChapterList() {
 function openChapter(chapterNum) {
     const chapterVerses = gitaData.filter(v => v.chapter == chapterNum);
     const container = document.getElementById('reader-content');
-    
+
     container.innerHTML = `
         <div style="text-align:center; margin-bottom: 4rem; border-bottom: 1px solid #eee; padding-bottom: 2rem;">
             <span style="color: #B45309; font-weight: bold; text-transform: uppercase; font-size: 0.9rem;">Chapter ${chapterNum}</span>
