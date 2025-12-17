@@ -7,6 +7,9 @@
     <title>Śrīmad Bhagavad Gītā</title>
     <link rel="stylesheet" href="style.css">
     <link rel="icon" type="image/png" href="/favicon.png">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="script.js" defer></script>
 </head>
 
 <body>
@@ -21,15 +24,32 @@
 
     <main id="view-home" class="container">
         <div class="verse-card">
-            <div id="loading" style="color:var(--text-secondary); font-style:italic; margin-top: 4rem;">Loading
-                wisdom...</div>
+            <div id="loading" style="color:var(--text-secondary); font-style:italic; margin-top: 4rem;">
+                Loading wisdom...
+            </div>
 
             <div id="verse-content" class="hidden">
-                <div class="verse-meta">
-                    <span id="verse-reference"></span>
+                <div id="shareable-card-wrapper">
+                    <div class="verse-meta" style="position: relative; margin-bottom: 3rem;">
+                        <span id="verse-reference"></span>
+                    </div>
+
+                    <h1 id="sanskrit-text" style="margin-top: 0;"></h1>
+                    <p id="translation-text"></p>
+
+                    <div class="card-footer">Śrīmad Bhagavad Gītā</div>
                 </div>
-                <h1 id="sanskrit-text"></h1>
-                <p id="translation-text"></p>
+
+                <div style="margin-top: 2rem;">
+                    <button id="btn-share" class="share-button icon-only" aria-label="Share Verse as Image">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path>
+                            <polyline points="16 6 12 2 8 6"></polyline>
+                            <line x1="12" y1="2" x2="12" y2="15"></line>
+                        </svg>
+                    </button>
+                </div>
             </div>
         </div>
     </main>
@@ -38,7 +58,8 @@
         <div class="header-section" style="text-align:center; margin-bottom:3rem;">
             <h2
                 style="font-family:var(--font-english); font-weight: 700; font-size:3rem; margin-bottom:0.5rem; color:var(--text-primary);">
-                The 18 Chapters</h2>
+                The 18 Chapters
+            </h2>
             <p style="color:var(--text-secondary); font-style:italic;">of wisdom.</p>
         </div>
         <div id="chapter-grid" class="grid">
@@ -59,7 +80,6 @@
         </p>
     </footer>
 
-    <script src="script.js"></script>
 </body>
 
 </html>

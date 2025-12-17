@@ -162,10 +162,6 @@ nav {
 }
 
 .verse-meta {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
     display: flex;
     justify-content: center;
     pointer-events: none;
@@ -318,6 +314,58 @@ footer a:hover {
     display: none !important;
 }
 
+#shareable-card-wrapper {
+    background-color: var(--bg-color);
+    padding: 3rem 2rem;
+    border-radius: 20px;
+    border: 2px solid transparent;
+}
+
+.card-footer {
+    font-family: var(--font-sanskrit-heading);
+    color: var(--accent-gold);
+    font-size: 1rem;
+    margin-top: 3rem;
+    opacity: 0.7;
+    text-transform: uppercase;
+    display: none;
+}
+
+.share-button.icon-only {
+    background-color: transparent;
+    color: var(--accent-gold);
+    border: 1px black;
+    padding: 0.8rem;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: none;
+}
+
+.share-button.icon-only svg {
+    margin-left: 0;
+}
+
+.share-button:hover {
+    transform: none;
+    background-color: rgba(180, 83, 9, 0.05);
+    box-shadow: none;
+}
+
+.share-button:active {
+    background-color: rgba(180, 83, 9, 0.1);
+}
+
+.share-button.loading {
+    opacity: 0.5;
+    cursor: wait;
+}
+
 @media (max-width: 768px) {
     .container {
         padding-left: 1.5rem;
@@ -326,7 +374,7 @@ footer a:hover {
         padding-bottom: 5rem;
     }
 
-    .verse-block, 
+    .verse-block,
     #reader-content {
         width: 88% !important;
         margin-left: auto;
@@ -334,9 +382,9 @@ footer a:hover {
         max-width: 100%;
     }
 
-    #sanskrit-text, 
+    #sanskrit-text,
     .verse-block p {
-        overflow-wrap: break-word; 
+        overflow-wrap: break-word;
         word-wrap: break-word;
         hyphens: auto;
     }
@@ -345,7 +393,7 @@ footer a:hover {
         font-size: 2.2rem;
         margin-top: 5rem;
     }
-    
+
     #reader-content h2 {
         font-size: 2.5rem;
     }

@@ -1,4 +1,5 @@
 let gitaData = [];
+let currentVerseObj = null;
 
 const chapterTitlesEnglish = [
     "The Distress of Arjuna", "The Path of Knowledge", "The Path of Selfless Action",
@@ -18,12 +19,12 @@ const chapterTitlesSanskrit = [
     "दैवासुरसंपद्विभागयोग", "श्रद्धात्रयविभागयोग", "मोक्षसंन्यासयोग"
 ];
 
-
 window.addEventListener('DOMContentLoaded', async () => {
     try {
         const response = await fetch('gita.json');
         if (!response.ok) throw new Error("File not found");
         const rawData = await response.json();
+        
         gitaData = rawData.map(item => {
             let cleanSanskrit = (item.text || item.shloka || item.sanskrit || "")
                 .replace(/[0-9.|]+$/g, '')
@@ -116,6 +117,8 @@ function showRandomVerse() {
     if (gitaData.length === 0) return;
     const randomIndex = Math.floor(Math.random() * gitaData.length);
     const verse = gitaData[randomIndex];
+    
+    currentVerseObj = verse;
 
     document.getElementById('loading').classList.add('hidden');
     document.getElementById('verse-content').classList.remove('hidden');
@@ -166,4 +169,78 @@ function openChapter(chapterNum) {
     });
 
     switchView('reader');
+}
+
+const btnShare = document.getElementById('btn-share');
+const cardToCapture = document.getElementById('shareable-card-wrapper');
+
+const MY_WEBSITE_URL = "bg.rdvn.in"; 
+const APP_TITLE = "Śrīmad Bhagavad Gītā";
+
+btnShare.addEventListener('click', async () => {
+    const originalBtnContent = btnShare.innerHTML;
+    btnShare.classList.add('loading');
+
+    const verseRefSpan = document.getElementById('verse-reference');
+    const cardFooterDiv = document.querySelector('.card-footer');
+    const originalRefText = verseRefSpan.textContent;
+
+    try {
+        verseRefSpan.textContent = `${APP_TITLE} \u00A0|\u00A0 ${originalRefText}`;
+        cardFooterDiv.textContent = MY_WEBSITE_URL;
+        cardFooterDiv.style.display = 'block';
+
+        cardToCapture.style.border = "2px solid #B45309";
+        cardToCapture.style.backgroundColor = "#FFF7ED"; 
+        
+        const canvas = await html2canvas(cardToCapture, {
+            scale: 3, 
+            useCORS: true,
+            backgroundColor: null
+        });
+
+        verseRefSpan.textContent = originalRefText; 
+        cardFooterDiv.style.display = 'none';
+        cardToCapture.style.border = "2px solid transparent";
+        cardToCapture.style.backgroundColor = "";
+
+        const dataURL = canvas.toDataURL('image/png');
+        const blob = dataURItoBlob(dataURL);
+        const file = new File([blob], 'gita-wisdom.png', { type: 'image/png' });
+
+        if (navigator.canShare && navigator.canShare({ files: [file] })) {
+            await navigator.share({
+                files: [file],
+                title: 'Śrīmad Bhagavad Gītā Wisdom',
+                text: `Read more at ${MY_WEBSITE_URL}`
+            });
+        } else {
+            const link = document.createElement('a');
+            link.download = 'verse.png';
+            link.href = dataURL;
+            link.click();
+        }
+
+    } catch (err) {
+        console.error('Error creating/sharing image:', err);
+        verseRefSpan.textContent = originalRefText;
+        cardFooterDiv.style.display = 'none';
+        cardToCapture.style.border = "2px solid transparent";
+        cardToCapture.style.backgroundColor = "";
+
+    } finally {
+        btnShare.classList.remove('loading');
+        btnShare.innerHTML = originalBtnContent;
+    }
+});
+
+function dataURItoBlob(dataURI) {
+    const byteString = atob(dataURI.split(',')[1]);
+    const mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
+    const ab = new ArrayBuffer(byteString.length);
+    const ia = new Uint8Array(ab);
+    for (let i = 0; i < byteString.length; i++) {
+        ia[i] = byteString.charCodeAt(i);
+    }
+    return new Blob([ab], { type: mimeString });
 }
