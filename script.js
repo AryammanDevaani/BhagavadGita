@@ -206,7 +206,7 @@ btnShare.addEventListener('click', async () => {
 
         const dataURL = canvas.toDataURL('image/png');
         const blob = dataURItoBlob(dataURL);
-        const file = new File([blob], 'gita-wisdom.png', { type: 'image/png' });
+        const file = new File([blob], 'verse.png', { type: 'image/png' });
 
         if (navigator.canShare && navigator.canShare({ files: [file] })) {
             await navigator.share({
