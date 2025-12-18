@@ -420,7 +420,7 @@ if (btnShare) {
                     if (wrapper) {
                         wrapper.style.width = "550px";
                         wrapper.style.margin = "0 auto";
-                        wrapper.style.border = "2px solid #B45309";
+                        wrapper.style.border = "0px solid #B45309";
                         wrapper.style.borderRadius = "20px";
                     }
                 }
@@ -428,7 +428,7 @@ if (btnShare) {
 
             const dataURL = canvas.toDataURL('image/png');
             const blob = await (await fetch(dataURL)).blob();
-            const file = new File([blob], 'verse.png', { type: 'image/png' });
+            const file = new File([blob], 'Verse.png', { type: 'image/png' });
 
             if (navigator.canShare && navigator.canShare({ files: [file] })) {
                 await navigator.share({ files: [file], title: APP_TITLE });
