@@ -1,51 +1,15 @@
-@font-face {
-    font-family: 'Inter';
-    src: url('fonts/Inter-Regular.ttf') format('truetype');
-    font-weight: 400;
-    font-style: normal;
-}
-@font-face {
-    font-family: 'Inter';
-    src: url('fonts/Inter-SemiBold.ttf') format('truetype');
-    font-weight: 600;
-    font-style: normal;
-}
-@font-face {
-    font-family: 'Playfair Display';
-    src: url('fonts/PlayfairDisplay-Regular.ttf') format('truetype');
-    font-weight: 400;
-    font-style: normal;
-}
-@font-face {
-    font-family: 'Playfair Display';
-    src: url('fonts/PlayfairDisplay-Italic.ttf') format('truetype');
-    font-weight: 400;
-    font-style: italic;
-}
-@font-face {
-    font-family: 'Playfair Display';
-    src: url('fonts/PlayfairDisplay-SemiBold.ttf') format('truetype');
-    font-weight: 600;
-    font-style: normal;
-}
-@font-face {
-    font-family: 'Playfair Display';
-    src: url('fonts/PlayfairDisplay-Bold.ttf') format('truetype');
-    font-weight: 700;
-    font-style: normal;
-}
-@font-face {
-    font-family: 'Rozha One';
-    src: url('fonts/RozhaOne-Regular.ttf') format('truetype');
-    font-weight: 400;
-    font-style: normal;
-}
-@font-face {
-    font-family: 'Arya';
-    src: url('fonts/Arya-Bold.ttf') format('truetype');
-    font-weight: 700;
-    font-style: normal;
-}
+/* =========================================
+   1. CORE TYPOGRAPHY & VARIABLES
+   ========================================= */
+@font-face { font-family: 'Inter'; src: url('fonts/Inter-Regular.ttf') format('truetype'); font-weight: 400; font-style: normal; }
+@font-face { font-family: 'Inter'; src: url('fonts/Inter-SemiBold.ttf') format('truetype'); font-weight: 600; font-style: normal; }
+@font-face { font-family: 'Playfair Display'; src: url('fonts/PlayfairDisplay-Regular.ttf') format('truetype'); font-weight: 400; font-style: normal; }
+@font-face { font-family: 'Playfair Display'; src: url('fonts/PlayfairDisplay-Italic.ttf') format('truetype'); font-weight: 400; font-style: italic; }
+@font-face { font-family: 'Playfair Display'; src: url('fonts/PlayfairDisplay-SemiBold.ttf') format('truetype'); font-weight: 600; font-style: normal; }
+@font-face { font-family: 'Playfair Display'; src: url('fonts/PlayfairDisplay-Bold.ttf') format('truetype'); font-weight: 700; font-style: normal; }
+@font-face { font-family: 'Rozha One'; src: url('fonts/RozhaOne-Regular.ttf') format('truetype'); font-weight: 400; font-style: normal; }
+@font-face { font-family: 'Arya'; src: url('fonts/Arya-Bold.ttf') format('truetype'); font-weight: 700; font-style: normal; }
+
 :root {
     --bg-color: #F9F7F2;
     --card-bg: #FFFFFF;
@@ -61,18 +25,11 @@
     --shadow-soft: 0 10px 40px -10px rgba(0, 0, 0, 0.08);
     --shadow-hover: 0 20px 50px -10px rgba(0, 0, 0, 0.12);
 }
-html {
-    scrollbar-width: none;
-    -ms-overflow-style: none;
-}
-body::-webkit-scrollbar {
-    display: none;
-}
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
+
+html { scrollbar-width: none; -ms-overflow-style: none; }
+body::-webkit-scrollbar { display: none; }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
 body {
     background-color: var(--bg-color);
     color: var(--text-primary);
@@ -83,6 +40,10 @@ body {
     flex-direction: column;
     overflow-x: hidden;
 }
+
+/* =========================================
+   2. NAVIGATION & LAYOUT
+   ========================================= */
 nav {
     display: flex;
     justify-content: space-between;
@@ -92,11 +53,13 @@ nav {
     margin: 0 auto;
     width: 100%;
 }
+
 .logo {
     font-family: var(--font-logo);
     font-size: 1.5rem;
     color: var(--text-primary);
 }
+
 .nav-link {
     background: none;
     border: none;
@@ -113,11 +76,12 @@ nav {
     text-align: center;
     display: inline-block;
 }
-.nav-link:hover,
-.nav-link.active {
+
+.nav-link:hover, .nav-link.active {
     color: var(--accent-gold);
     border-bottom: 2px solid var(--accent-gold);
 }
+
 .container {
     flex: 1;
     display: flex;
@@ -130,6 +94,10 @@ nav {
     width: 100%;
     transition: opacity 0.1s ease;
 }
+
+/* =========================================
+   3. VERSE & CHAPTER CARDS
+   ========================================= */
 .verse-card {
     text-align: center;
     position: relative;
@@ -139,16 +107,16 @@ nav {
     flex-direction: column;
     justify-content: center;
 }
-#verse-content {
-    width: 100%;
-}
+
+#verse-content { width: 100%; }
+
 .verse-meta {
     display: flex;
     justify-content: center;
     pointer-events: none;
 }
-#verse-reference,
-.verse-pill {
+
+#verse-reference, .verse-pill {
     background-color: var(--accent-light);
     color: var(--accent-gold);
     font-family: var(--font-english);
@@ -160,6 +128,7 @@ nav {
     border: 1px solid rgba(180, 83, 9, 0.1);
     display: inline-block;
 }
+
 #sanskrit-text {
     font-family: var(--font-sanskrit-heading);
     font-size: 3rem;
@@ -170,6 +139,7 @@ nav {
     margin: 6rem auto 2rem auto;
     white-space: pre-line;
 }
+
 #translation-text {
     font-family: var(--font-english);
     font-size: 1.4rem;
@@ -180,12 +150,14 @@ nav {
     font-style: italic;
     white-space: pre-line;
 }
+
 .grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
     gap: 2rem;
     width: 100%;
 }
+
 .chapter-card {
     background: var(--card-bg);
     padding: 2rem;
@@ -200,11 +172,13 @@ nav {
     flex-direction: column;
     justify-content: center;
 }
+
 .chapter-card:hover {
     transform: translateY(-8px);
     box-shadow: var(--shadow-hover);
     border-color: var(--accent-light);
 }
+
 .chapter-card h3 {
     font-family: var(--font-sanskrit-body);
     font-size: 1.8rem;
@@ -212,10 +186,12 @@ nav {
     margin: 0.5rem 0;
     color: var(--text-primary);
 }
+
 .chapter-card p {
     font-style: italic;
     color: var(--text-secondary);
 }
+
 #reader-content h2 {
     font-family: var(--font-sanskrit-heading);
     font-size: 3.5rem;
@@ -223,6 +199,29 @@ nav {
     font-weight: 400;
     color: var(--text-primary);
 }
+
+/* Elegant Large Back Arrow */
+.back-link {
+    background: none;
+    border: none;
+    color: var(--accent-gold);
+    font-family: var(--font-logo);
+    font-size: 2rem;
+    font-weight: 300;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    padding: 0;
+    margin-bottom: 1rem;
+    line-height: 1;
+    display: inline-block;
+    opacity: 0.5;
+    
+    /* FIX: Ensures cursor is only pointer on the arrow itself, not the empty space */
+    width: fit-content; 
+}
+
+.back-link:hover { opacity: 1; }
+
 .verse-block {
     margin-bottom: 5rem;
     padding-bottom: 4rem;
@@ -230,6 +229,7 @@ nav {
     max-width: 750px;
     margin: 0 auto;
 }
+
 .verse-block p:first-of-type {
     font-family: var(--font-sanskrit-heading);
     font-size: 3rem;
@@ -239,6 +239,7 @@ nav {
     color: var(--text-primary);
     white-space: pre-line;
 }
+
 .verse-block p:last-of-type {
     font-family: var(--font-english);
     font-size: 1.4rem;
@@ -247,6 +248,7 @@ nav {
     font-style: italic;
     white-space: pre-line;
 }
+
 footer {
     text-align: center;
     padding: 3rem 1rem;
@@ -257,22 +259,28 @@ footer {
     line-height: 1.6;
     letter-spacing: -0.01em;
 }
+
 footer a {
     color: var(--accent-gold);
     text-decoration: none;
     font-weight: 600;
     transition: all 0.1s ease;
 }
+
 footer a:hover {
     border-bottom-style: solid;
     opacity: 0.7;
 }
-.hidden {
-    display: none !important;
-}
+
+.hidden { display: none !important; }
+
+/* =========================================
+   4. UTILITIES & BUTTONS
+   ========================================= */
 .share-button.icon-only {
     background-color: transparent;
     color: var(--accent-gold);
+    border: 1px solid var(--accent-gold);
     padding: 0.8rem;
     width: 56px;
     height: 56px;
@@ -283,61 +291,19 @@ footer a:hover {
     align-items: center;
     justify-content: center;
 }
-.share-button:active {
-    background-color: rgba(180, 83, 9, 0.1);
-}
-.share-button.loading {
-    opacity: 0.5;
-    cursor: wait;
-}
-@media (max-width: 768px) {
-    .container {
-        padding: 1rem 1.5rem 5rem 1.5rem;
-    }
-    .verse-block,
-    #reader-content {
-        width: 88% !important;
-        margin-left: auto;
-        margin-right: auto;
-        max-width: 100%;
-    }
-    #sanskrit-text,
-    .verse-block p {
-        overflow-wrap: break-word;
-        word-wrap: break-word;
-        hyphens: auto;
-    }
-    #sanskrit-text {
-        font-size: 2.2rem;
-        margin-top: 5rem;
-    }
-    #reader-content h2 {
-        font-size: 2.5rem;
-    }
-    .verse-block p:first-of-type {
-        font-size: 2.2rem;
-    }
-    footer {
-        padding-bottom: 2rem;
-        font-size: 0.85rem;
-    }
-    nav {
-        justify-content: center;
-        gap: 1.5rem;
-        flex-direction: column;
-        padding: 1.5rem 1rem;
-    }
-    .logo {
-        margin-bottom: 0.5rem;
-    }
-}
+
+.share-button:active { background-color: rgba(180, 83, 9, 0.1); }
+.share-button.loading { opacity: 0.5; cursor: wait; }
+.share-button.icon-only:hover { background-color: rgba(180, 83, 9, 0.05); }
+
 #shareable-card-wrapper {
     background-color: var(--bg-color);
     padding: 3rem 2rem;
     border-radius: 0px;
-    border: 20px solid transparent;
+    border: 2px solid transparent;
     width: 100%;
 }
+
 .card-footer {
     font-family: var(--font-logo);
     color: var(--accent-gold);
@@ -346,6 +312,84 @@ footer a:hover {
     opacity: 0.7;
     display: none;
 }
-.share-button.icon-only:hover {
-    background-color: rgba(180, 83, 9, 0.05);
+
+#btn-install-action {
+    background-color: var(--accent-gold);
+    color: var(--accent-light);
+    border: none;
+    padding: 1rem 2.5rem;
+    border-radius: 100px;
+    cursor: pointer;
+    box-shadow: 0 10px 20px -5px rgba(180, 83, 9, 0.3);
+    transition: transform 0.2s ease;
+    font-family: var(--font-english);
+    font-size: 1.2rem;
+    font-weight: 600;
+    font-style: italic;
+    letter-spacing: 0.02em;
+}
+
+#btn-install-action:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 15px 30px -5px rgba(180, 83, 9, 0.4);
+}
+
+@media (max-width: 768px) {
+    .container { padding: 1rem 1.5rem 5rem 1.5rem; }
+    .verse-block, #reader-content { width: 88% !important; margin-left: auto; margin-right: auto; max-width: 100%; }
+    #sanskrit-text, .verse-block p { overflow-wrap: break-word; word-wrap: break-word; hyphens: auto; }
+    #sanskrit-text { font-size: 2.2rem; margin-top: 5rem; }
+    #reader-content h2 { font-size: 2.5rem; }
+    .verse-block p:first-of-type { font-size: 2.2rem; }
+    footer { padding-bottom: 2rem; font-size: 0.85rem; }
+    nav { justify-content: center; gap: 1.5rem; flex-direction: column; padding: 1.5rem 1rem; }
+    .logo { margin-bottom: 0.5rem; }
+}
+
+/* =========================================
+   5. WAR ANIMATION (SVG VERSION)
+   ========================================= */
+
+.war-overlay {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw; height: 100vh;
+    background-color: var(--bg-color);
+    z-index: 9999;
+    overflow: hidden;
+    pointer-events: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Container for the SVG Arrow */
+.war-arrow {
+    position: absolute;
+    top: 0; left: 0;
+    width: 80px;  /* Longer for realism */
+    height: 12px; /* Height of the fletching */
+    opacity: 1;   /* Always visible */
+    
+    /* This aligns the arrow SVG to the flight path */
+    offset-rotate: auto; 
+    transform-origin: center center;
+    will-change: transform, offset-path;
+}
+
+/* Ensure the SVG fills the container */
+.war-arrow svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+    overflow: visible;
+}
+
+/* --- Army Colors --- */
+.arrow-left { color: var(--text-secondary); } /* Dark */
+.arrow-right { color: var(--accent-gold); }   /* Gold */
+
+/* Glow for Hero Arrows */
+.arrow-hero {
+    filter: drop-shadow(0 0 3px var(--accent-gold));
 }

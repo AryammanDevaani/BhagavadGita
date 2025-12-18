@@ -7,46 +7,51 @@
 
     <title>Śrīmad Bhagavad Gītā</title>
     <meta name="title" content="Śrīmad Bhagavad Gītā — Learn Something New, Always">
-    <meta name="description" content="">
+    <meta name="description" content="Explore the timeless wisdom of the Bhagavad Gītā with “For You” verses and translations.">
 
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://www.bhgvd.com/">
     <meta property="og:title" content="Śrīmad Bhagavad Gītā">
-    <meta property="og:description" content="">
+    <meta property="og:description" content="Timeless wisdom from the Gītā, for you.">
     <meta property="og:image" content="https://www.bhgvd.com/favicon.png">
 
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:url" content="https://www.bhgvd.com/">
     <meta property="twitter:title" content="Śrīmad Bhagavad Gītā">
-    <meta property="twitter:description" content="Learn from कृष्ण himself.">
+    <meta property="twitter:description" content="Timeless wisdom from the Gītā, for you.">
     <meta property="twitter:image" content="https://www.bhgvd.com/favicon.png">
+
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#B45309">
 
     <link rel="stylesheet" href="style.css">
     <link rel="icon" type="image/png" href="/favicon.png">
+    <link rel="canonical" href="https://www.bhgvd.com/" />
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="script.js" defer></script>
     <meta name="google-site-verification" content="6vXfU2JttKNjaVxz8PgORC0tJNEvxPF-QQFx5jUkz2o" />
     <meta name="robots" content="index, follow">
-    <link rel="canonical" href="https://www.bhgvd.com/" />
-    <script src="script.js" defer></script>
 </head>
 
 <body>
+
+    <div id="war-loader" class="war-overlay hidden"></div>
 
     <nav>
         <div class="logo">ŚRĪMAD BHAGAVAD GĪTĀ</div>
         <div style="display:flex; gap:1.5rem;">
             <button id="btn-home" class="nav-link active">For You</button>
-            <button id="btn-chapters" class="nav-link">Read All</button>
+            <button id="btn-chapters" class="nav-link">Chapters</button>
+            <button id="btn-install-view" class="nav-link" style="display: none;">Install</button>
         </div>
     </nav>
 
     <main id="view-home" class="container">
         <div class="verse-card">
-            <div id="loading" style="color:var(--text-secondary); font-style:italic; margin-top: 4rem;">
-                Loading wisdom...
-            </div>
-
+            
             <div id="verse-content" class="hidden">
                 <div id="shareable-card-wrapper">
                     <div class="verse-meta" style="position: relative; margin-bottom: 3rem;">
@@ -75,8 +80,7 @@
 
     <main id="view-chapters" class="container hidden">
         <div class="header-section" style="text-align:center; margin-bottom:3rem;">
-            <h2
-                style="font-family:var(--font-english); font-weight: 700; font-size:3rem; margin-bottom:0.5rem; color:var(--text-primary);">
+            <h2 style="font-family:var(--font-english); font-weight: 700; font-size:3rem; margin-bottom:0.5rem; color:var(--text-primary);">
                 The 18 Chapters
             </h2>
             <p style="color:var(--text-secondary); font-style:italic;">of wisdom.</p>
@@ -90,15 +94,57 @@
         </div>
     </main>
 
+    <main id="view-install" class="container hidden">
+        <div style="text-align: center; max-width: 500px;">
+            <h2 style="font-family: var(--font-english); font-size: 2.5rem; margin-bottom: 1rem; color: var(--accent-gold);">
+                Keep Wisdom Close
+            </h2>
+            <p style="font-family: var(--font-english); font-size: 1.2rem; line-height: 1.6; margin-bottom: 2rem; color: var(--text-secondary);">
+                Install this app to read offline and access the Gītā instantly.
+            </p>
+
+            <div id="instructions-ios" class="hidden"
+                style="text-align: left; background: white; padding: 2rem; border-radius: 16px; border: 1px solid rgba(0,0,0,0.05); box-shadow: var(--shadow-soft);">
+                <h3 style="font-family: var(--font-sanskrit-heading); margin-bottom: 1rem; color: var(--text-primary);">
+                    For iPhone:</h3>
+                <ol style="font-family: var(--font-english); line-height: 1.8; margin-left: 1.5rem; color: #666;">
+                    <li>Tap the <strong>Share</strong> button <span style="font-size:1.2rem">⎋</span> below.</li>
+                    <li>Scroll down and select <strong>"Add to Home Screen"</strong> <span style="font-size:1.2rem">⊞</span>.</li>
+                    <li>Tap <strong>Add</strong> in the top right corner.</li>
+                </ol>
+            </div>
+
+            <div id="instructions-android" class="hidden"
+                style="text-align: left; background: white; padding: 2rem; border-radius: 16px; border: 1px solid rgba(0,0,0,0.05); box-shadow: var(--shadow-soft);">
+                <h3 style="font-family: var(--font-sanskrit-heading); margin-bottom: 1rem; color: var(--text-primary);">
+                    For Android:</h3>
+                <ol style="font-family: var(--font-english); line-height: 1.8; margin-left: 1.5rem; color: #666;">
+                    <li>Tap the <strong>Menu</strong> icon <span style="font-size:1.2rem">⋮</span> (top right).</li>
+                    <li>Select <strong>"Install App"</strong> or <strong>"Add to Home Screen"</strong>.</li>
+                    <li>Tap <strong>Install</strong> to confirm.</li>
+                </ol>
+            </div>
+
+            <div id="install-success" class="hidden"
+                style="margin-top: 2rem; color: green; font-family: var(--font-english); font-style: italic; font-weight: 600;">
+                ✨ You have the app installed.
+            </div>
+        </div>
+    </main>
+
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js');
+        }
+    </script>
+
     <footer>
         <p>
             have an issue or a suggestion?
-            <a
-                href="mailto:aryammandevaani@icloud.com?subject=BHGVD&body=नमस्ते,%0D%0A%0D%0AI would like to share the following feedback:">
+            <a href="mailto:aryammandevaani@icloud.com?subject=BHGVD&body=नमस्ते,%0D%0A%0D%0AI would like to share the following feedback:">
                 e-mail</a> me!
         </p>
     </footer>
 
 </body>
-
 </html>
