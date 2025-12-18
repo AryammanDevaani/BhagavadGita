@@ -1,14 +1,61 @@
 /* =========================================
    1. CORE TYPOGRAPHY & VARIABLES
    ========================================= */
-@font-face { font-family: 'Inter'; src: url('fonts/Inter-Regular.ttf') format('truetype'); font-weight: 400; font-style: normal; }
-@font-face { font-family: 'Inter'; src: url('fonts/Inter-SemiBold.ttf') format('truetype'); font-weight: 600; font-style: normal; }
-@font-face { font-family: 'Playfair Display'; src: url('fonts/PlayfairDisplay-Regular.ttf') format('truetype'); font-weight: 400; font-style: normal; }
-@font-face { font-family: 'Playfair Display'; src: url('fonts/PlayfairDisplay-Italic.ttf') format('truetype'); font-weight: 400; font-style: italic; }
-@font-face { font-family: 'Playfair Display'; src: url('fonts/PlayfairDisplay-SemiBold.ttf') format('truetype'); font-weight: 600; font-style: normal; }
-@font-face { font-family: 'Playfair Display'; src: url('fonts/PlayfairDisplay-Bold.ttf') format('truetype'); font-weight: 700; font-style: normal; }
-@font-face { font-family: 'Rozha One'; src: url('fonts/RozhaOne-Regular.ttf') format('truetype'); font-weight: 400; font-style: normal; }
-@font-face { font-family: 'Arya'; src: url('fonts/Arya-Bold.ttf') format('truetype'); font-weight: 700; font-style: normal; }
+@font-face {
+    font-family: 'Inter';
+    src: url('fonts/Inter-Regular.ttf') format('truetype');
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Inter';
+    src: url('fonts/Inter-SemiBold.ttf') format('truetype');
+    font-weight: 600;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Playfair Display';
+    src: url('fonts/PlayfairDisplay-Regular.ttf') format('truetype');
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Playfair Display';
+    src: url('fonts/PlayfairDisplay-Italic.ttf') format('truetype');
+    font-weight: 400;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'Playfair Display';
+    src: url('fonts/PlayfairDisplay-SemiBold.ttf') format('truetype');
+    font-weight: 600;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Playfair Display';
+    src: url('fonts/PlayfairDisplay-Bold.ttf') format('truetype');
+    font-weight: 700;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Rozha One';
+    src: url('fonts/RozhaOne-Regular.ttf') format('truetype');
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Arya';
+    src: url('fonts/Arya-Bold.ttf') format('truetype');
+    font-weight: 700;
+    font-style: normal;
+}
 
 :root {
     --bg-color: #F9F7F2;
@@ -26,9 +73,20 @@
     --shadow-hover: 0 20px 50px -10px rgba(0, 0, 0, 0.12);
 }
 
-html { scrollbar-width: none; -ms-overflow-style: none; }
-body::-webkit-scrollbar { display: none; }
-* { margin: 0; padding: 0; box-sizing: border-box; }
+html {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+body::-webkit-scrollbar {
+    display: none;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 
 body {
     background-color: var(--bg-color);
@@ -77,7 +135,8 @@ nav {
     display: inline-block;
 }
 
-.nav-link:hover, .nav-link.active {
+.nav-link:hover,
+.nav-link.active {
     color: var(--accent-gold);
     border-bottom: 2px solid var(--accent-gold);
 }
@@ -108,7 +167,9 @@ nav {
     justify-content: center;
 }
 
-#verse-content { width: 100%; }
+#verse-content {
+    width: 100%;
+}
 
 .verse-meta {
     display: flex;
@@ -116,7 +177,8 @@ nav {
     pointer-events: none;
 }
 
-#verse-reference, .verse-pill {
+#verse-reference,
+.verse-pill {
     background-color: var(--accent-light);
     color: var(--accent-gold);
     font-family: var(--font-english);
@@ -215,12 +277,14 @@ nav {
     line-height: 1;
     display: inline-block;
     opacity: 0.5;
-    
+
     /* FIX: Ensures cursor is only pointer on the arrow itself, not the empty space */
-    width: fit-content; 
+    width: fit-content;
 }
 
-.back-link:hover { opacity: 1; }
+.back-link:hover {
+    opacity: 1;
+}
 
 .verse-block {
     margin-bottom: 5rem;
@@ -272,7 +336,9 @@ footer a:hover {
     opacity: 0.7;
 }
 
-.hidden { display: none !important; }
+.hidden {
+    display: none !important;
+}
 
 /* =========================================
    4. UTILITIES & BUTTONS
@@ -292,9 +358,18 @@ footer a:hover {
     justify-content: center;
 }
 
-.share-button:active { background-color: rgba(180, 83, 9, 0.1); }
-.share-button.loading { opacity: 0.5; cursor: wait; }
-.share-button.icon-only:hover { background-color: rgba(180, 83, 9, 0.05); }
+.share-button:active {
+    background-color: rgba(180, 83, 9, 0.1);
+}
+
+.share-button.loading {
+    opacity: 0.5;
+    cursor: wait;
+}
+
+.share-button.icon-only:hover {
+    background-color: rgba(180, 83, 9, 0.05);
+}
 
 #shareable-card-wrapper {
     background-color: var(--bg-color);
@@ -335,15 +410,53 @@ footer a:hover {
 }
 
 @media (max-width: 768px) {
-    .container { padding: 1rem 1.5rem 5rem 1.5rem; }
-    .verse-block, #reader-content { width: 88% !important; margin-left: auto; margin-right: auto; max-width: 100%; }
-    #sanskrit-text, .verse-block p { overflow-wrap: break-word; word-wrap: break-word; hyphens: auto; }
-    #sanskrit-text { font-size: 2.2rem; margin-top: 5rem; }
-    #reader-content h2 { font-size: 2.5rem; }
-    .verse-block p:first-of-type { font-size: 2.2rem; }
-    footer { padding-bottom: 2rem; font-size: 0.85rem; }
-    nav { justify-content: center; gap: 1.5rem; flex-direction: column; padding: 1.5rem 1rem; }
-    .logo { margin-bottom: 0.5rem; }
+    .container {
+        padding: 1rem 1.5rem 5rem 1.5rem;
+    }
+
+    .verse-block,
+    #reader-content {
+        width: 88% !important;
+        margin-left: auto;
+        margin-right: auto;
+        max-width: 100%;
+    }
+
+    #sanskrit-text,
+    .verse-block p {
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+        hyphens: auto;
+    }
+
+    #sanskrit-text {
+        font-size: 2.2rem;
+        margin-top: 5rem;
+    }
+
+    #reader-content h2 {
+        font-size: 2.5rem;
+    }
+
+    .verse-block p:first-of-type {
+        font-size: 2.2rem;
+    }
+
+    footer {
+        padding-bottom: 2rem;
+        font-size: 0.85rem;
+    }
+
+    nav {
+        justify-content: center;
+        gap: 1.5rem;
+        flex-direction: column;
+        padding: 1.5rem 1rem;
+    }
+
+    .logo {
+        margin-bottom: 0.5rem;
+    }
 }
 
 /* =========================================
@@ -352,8 +465,10 @@ footer a:hover {
 
 .war-overlay {
     position: fixed;
-    top: 0; left: 0;
-    width: 100vw; height: 100vh;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
     background-color: var(--bg-color);
     z-index: 9999;
     overflow: hidden;
@@ -366,13 +481,17 @@ footer a:hover {
 /* Container for the SVG Arrow */
 .war-arrow {
     position: absolute;
-    top: 0; left: 0;
-    width: 80px;  /* Longer for realism */
-    height: 12px; /* Height of the fletching */
-    opacity: 1;   /* Always visible */
-    
+    top: 0;
+    left: 0;
+    width: 80px;
+    /* Longer for realism */
+    height: 12px;
+    /* Height of the fletching */
+    opacity: 1;
+    /* Always visible */
+
     /* This aligns the arrow SVG to the flight path */
-    offset-rotate: auto; 
+    offset-rotate: auto;
     transform-origin: center center;
     will-change: transform, offset-path;
 }
@@ -386,8 +505,16 @@ footer a:hover {
 }
 
 /* --- Army Colors --- */
-.arrow-left { color: var(--text-secondary); } /* Dark */
-.arrow-right { color: var(--accent-gold); }   /* Gold */
+.arrow-left {
+    color: var(--text-secondary);
+}
+
+/* Dark */
+.arrow-right {
+    color: var(--accent-gold);
+}
+
+/* Gold */
 
 /* Glow for Hero Arrows */
 .arrow-hero {

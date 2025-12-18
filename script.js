@@ -3,7 +3,7 @@ let currentVerseObj = null;
 
 // Control flags for the animation loop
 let warInterval = null;
-let stopWarRequested = false; 
+let stopWarRequested = false;
 
 // =========================================
 // 1. DATA & CONSTANTS
@@ -33,7 +33,7 @@ const chapterTitlesSanskrit = [
 // 2. INITIALIZATION
 // =========================================
 window.addEventListener('DOMContentLoaded', async () => {
-    
+
     // 1. START THE WAR LOOP IMMEDIATELY
     startWarLoop();
 
@@ -51,7 +51,7 @@ window.addEventListener('DOMContentLoaded', async () => {
                 cleanSanskrit += " ।।";
             }
             let rawEnglish = item.translation || item.meaning || "Meaning unavailable.";
-            
+
             return {
                 chapter: item.chapter || item.chapter_number || 1,
                 verse: item.verse || item.verse_number || 1,
@@ -85,9 +85,9 @@ function startWarLoop() {
     const loadingText = document.getElementById('loading');
 
     // Reset UI
-    if(loadingText) loadingText.classList.add('hidden');
-    if(content) content.classList.add('hidden');
-    if(loader) {
+    if (loadingText) loadingText.classList.add('hidden');
+    if (content) content.classList.add('hidden');
+    if (loader) {
         loader.classList.remove('hidden');
         loader.innerHTML = '';
         loader.style.opacity = '1';
@@ -101,7 +101,7 @@ function startWarLoop() {
             return;
         }
 
-        if(loader) {
+        if (loader) {
             // 100 Enemy Arrows
             for (let i = 0; i < 100; i++) {
                 fireProjectile(loader, 'left');
@@ -125,7 +125,7 @@ function revealSuccess() {
     const content = document.getElementById('verse-content');
 
     // 1. Fade out War
-    if(loader) {
+    if (loader) {
         loader.style.transition = 'opacity 0.5s ease';
         loader.style.opacity = '0';
         setTimeout(() => { loader.classList.add('hidden'); }, 500);
@@ -140,8 +140,8 @@ function revealSuccess() {
         document.getElementById('sanskrit-text').textContent = verse.sanskrit;
         document.getElementById('translation-text').textContent = verse.translation;
         document.getElementById('verse-reference').textContent = `Chapter ${verse.chapter} • Verse ${verse.verse}`;
-        
-        if(content) {
+
+        if (content) {
             content.classList.remove('hidden');
             content.animate([
                 { opacity: 0, transform: 'translateY(20px)' },
@@ -155,8 +155,8 @@ function revealSuccess() {
 // 4. PHYSICS ENGINE (SVG & Off-Screen Logic)
 // =========================================
 function fireProjectile(container, side) {
-    if(!container) return;
-    
+    if (!container) return;
+
     const arrow = document.createElement('div');
     arrow.classList.add('war-arrow');
     arrow.classList.add(side === 'left' ? 'arrow-left' : 'arrow-right');
@@ -175,17 +175,17 @@ function fireProjectile(container, side) {
     // 1. Coordinates: Start/End FAR off-screen (-150px)
     const w = window.innerWidth;
     const h = window.innerHeight;
-    
+
     // Left Army: Starts far left, lands far right
     // Right Army: Starts far right, lands far left
     let startX = side === 'left' ? -150 : w + 150;
-    
+
     // Randomize Start Height (Bottom half of screen)
-    let startY = h - (Math.random() * (h * 0.5)); 
+    let startY = h - (Math.random() * (h * 0.5));
 
     // End Position: Just past the middle, ensuring they cross screen
     let endX = side === 'left' ? w + 150 : -150;
-    let endY = (h * 0.2) + (Math.random() * (h * 0.5)); 
+    let endY = (h * 0.2) + (Math.random() * (h * 0.5));
 
     // 2. Physics (Bezier Control Point)
     let peakHeight = h * 0.1;
@@ -194,9 +194,9 @@ function fireProjectile(container, side) {
 
     const pathString = `M ${startX},${startY} Q ${controlX},${controlY} ${endX},${endY}`;
     arrow.style.offsetPath = `path('${pathString}')`;
-    
+
     // 3. Visual Variation
-    const scale = 0.8 + (Math.random() * 0.4); 
+    const scale = 0.8 + (Math.random() * 0.4);
     arrow.style.transform = `scale(${scale})`;
     arrow.style.zIndex = Math.floor(scale * 100);
 
@@ -204,10 +204,10 @@ function fireProjectile(container, side) {
 
     // 4. Animation (Linear, Constant Visibility)
     const duration = 1500 + (Math.random() * 500); // 1.5s to 2.0s
-    
+
     const animation = arrow.animate([
         { offsetDistance: '0%' },
-        { offsetDistance: '100%' } 
+        { offsetDistance: '100%' }
     ], {
         duration: duration,
         easing: 'linear', // Constant speed
@@ -260,7 +260,7 @@ if (btnChapters) {
 if (btnInstallView) {
     btnInstallView.onclick = () => {
         const isInstallActive = !views.install.classList.contains('hidden');
-        if(isInstallActive) {
+        if (isInstallActive) {
             window.scrollTo({ top: 0, behavior: 'smooth' });
         } else {
             switchView('install');
@@ -271,28 +271,28 @@ if (btnInstallView) {
 function switchView(viewName) {
     // Hide all views
     Object.values(views).forEach(el => {
-        if(el) el.classList.add('hidden');
+        if (el) el.classList.add('hidden');
     });
-    
+
     // Show selected view
-    if(views[viewName]) views[viewName].classList.remove('hidden');
+    if (views[viewName]) views[viewName].classList.remove('hidden');
 
     // Reset Nav Buttons
     [btnHome, btnChapters, btnInstallView].forEach(btn => {
-        if(btn) btn.classList.remove('active');
+        if (btn) btn.classList.remove('active');
     });
 
     // Set Active State & Button Text
     if (viewName === 'home') {
         btnHome.classList.add('active');
-    } 
+    }
     else if (viewName === 'chapters' || viewName === 'reader') {
         btnChapters.classList.add('active');
-        btnChapters.textContent = "Chapters"; 
+        btnChapters.textContent = "Chapters";
     }
     else if (viewName === 'install') {
         btnInstallView.classList.add('active');
-        updateInstallView(); 
+        updateInstallView();
     }
 
     // TRIGGER FADE IN FOR EVERY VIEW CHANGE
@@ -303,18 +303,18 @@ function switchView(viewName) {
 
 function fadeContent() {
     const main = document.querySelector('main:not(.hidden)');
-    if(!main) return;
-    
+    if (!main) return;
+
     // Reset to transparent
     main.style.opacity = '0';
     main.style.transform = 'translateY(10px)';
-    
+
     // Trigger reflow (optional safety) before applying transition
-    void main.offsetWidth; 
+    void main.offsetWidth;
 
     // Apply Transition
     main.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
-    
+
     setTimeout(() => {
         main.style.opacity = '1';
         main.style.transform = 'translateY(0)';
@@ -328,17 +328,17 @@ function showRandomVerse() {
     // Manual Refresh Logic:
     stopWarRequested = false;
     startWarLoop(); // Start War
-    
+
     setTimeout(() => {
-        if(gitaData.length > 0) {
+        if (gitaData.length > 0) {
             stopWarRequested = true; // Stop War
         }
-    }, 2000); 
+    }, 2000);
 }
 
 function renderChapterList() {
     const grid = document.getElementById('chapter-grid');
-    if(!grid) return;
+    if (!grid) return;
     grid.innerHTML = '';
 
     for (let i = 1; i <= 18; i++) {
@@ -392,7 +392,7 @@ function openChapter(chapterNum) {
 const btnShare = document.getElementById('btn-share');
 const cardToCapture = document.getElementById('shareable-card-wrapper');
 
-if(btnShare) {
+if (btnShare) {
     btnShare.addEventListener('click', async () => {
         const originalIcon = btnShare.innerHTML;
         btnShare.classList.add('loading');
@@ -420,7 +420,7 @@ if(btnShare) {
                     if (wrapper) {
                         wrapper.style.width = "550px";
                         wrapper.style.margin = "0 auto";
-                        wrapper.style.border = "2px solid #B45309"; 
+                        wrapper.style.border = "2px solid #B45309";
                         wrapper.style.borderRadius = "20px";
                     }
                 }
@@ -455,29 +455,24 @@ const androidInstructions = document.getElementById('instructions-android');
 const successMsg = document.getElementById('install-success');
 
 function updateInstallView() {
-    if(iosInstructions) iosInstructions.classList.add('hidden');
-    if(androidInstructions) androidInstructions.classList.add('hidden');
-    if(successMsg) successMsg.classList.add('hidden');
+    if (iosInstructions) iosInstructions.classList.add('hidden');
+    if (androidInstructions) androidInstructions.classList.add('hidden');
+    if (successMsg) successMsg.classList.add('hidden');
 
     if (isStandalone) {
-        if(successMsg) successMsg.classList.remove('hidden');
-    } 
+        if (successMsg) successMsg.classList.remove('hidden');
+    }
     else if (isIos) {
-        if(iosInstructions) iosInstructions.classList.remove('hidden');
-    } 
+        if (iosInstructions) iosInstructions.classList.remove('hidden');
+    }
     else {
-        if(androidInstructions) androidInstructions.classList.remove('hidden');
+        if (androidInstructions) androidInstructions.classList.remove('hidden');
     }
 }
 
 // Desktop Hide Logic
 const navInstallBtn = document.getElementById('btn-install-view');
 const isMobileDevice = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-
-// UPDATED LOGIC: Only show if Mobile AND NOT already installed
-if (isMobileDevice && !isStandalone && navInstallBtn) {
+if (isMobileDevice && navInstallBtn) {
     navInstallBtn.style.display = 'block';
-} else if (navInstallBtn) {
-    // Force hide if installed (or desktop)
-    navInstallBtn.style.display = 'none';
 }
