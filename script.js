@@ -470,9 +470,19 @@ function updateInstallView() {
     }
 }
 
-// Desktop Hide Logic
+// =========================================
+// FINAL DISPLAY LOGIC
+// =========================================
 const navInstallBtn = document.getElementById('btn-install-view');
 const isMobileDevice = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-if (isMobileDevice && navInstallBtn) {
-    navInstallBtn.style.display = 'block';
+
+if (navInstallBtn) {
+    // Only show button if:
+    // 1. It IS a mobile device
+    // 2. AND it is NOT already running as an app (Standalone)
+    if (isMobileDevice && !isStandalone) {
+        navInstallBtn.style.display = 'block';
+    } else {
+        navInstallBtn.style.display = 'none';
+    }
 }
