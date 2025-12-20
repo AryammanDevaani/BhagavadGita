@@ -1,13 +1,9 @@
 let gitaData = [];
 let currentVerseObj = null;
 
-// Control flags for the animation loop
 let warInterval = null;
 let stopWarRequested = false;
 
-// =========================================
-// 1. DATA & CONSTANTS
-// =========================================
 const MY_WEBSITE_URL = "bhgvd.com";
 const APP_TITLE = "Śrīmad Bhagavad Gītā";
 
@@ -29,15 +25,10 @@ const chapterTitlesSanskrit = [
     "दैवासुरसंपद्विभागयोग", "श्रद्धात्रयविभागयोग", "मोक्षसंन्यासयोग"
 ];
 
-// =========================================
-// 2. INITIALIZATION
-// =========================================
 window.addEventListener('DOMContentLoaded', async () => {
 
-    // 1. START THE WAR LOOP IMMEDIATELY
     startWarLoop();
 
-    // 2. Attempt Fetch
     try {
         const response = await fetch('gita.json');
         if (!response.ok) throw new Error("File not found");
@@ -67,7 +58,6 @@ window.addEventListener('DOMContentLoaded', async () => {
 
         renderChapterList();
 
-        // SUCCESS: Request the war to stop!
         stopWarRequested = true;
 
     } catch (error) {
@@ -75,16 +65,11 @@ window.addEventListener('DOMContentLoaded', async () => {
     }
 });
 
-// =========================================
-// 3. WAR LOOP LOGIC
-// =========================================
-
 function startWarLoop() {
     const loader = document.getElementById('war-loader');
     const content = document.getElementById('verse-content');
     const loadingText = document.getElementById('loading');
 
-    // Reset UI
     if (loadingText) loadingText.classList.add('hidden');
     if (content) content.classList.add('hidden');
     if (loader) {
@@ -93,7 +78,6 @@ function startWarLoop() {
         loader.style.opacity = '1';
     }
 
-    // Function to fire one round of arrows
     const fireVolley = () => {
         if (stopWarRequested) {
             clearInterval(warInterval);
@@ -102,21 +86,17 @@ function startWarLoop() {
         }
 
         if (loader) {
-            // 100 Enemy Arrows
             for (let i = 0; i < 100; i++) {
                 fireProjectile(loader, 'left');
             }
-            // 5 Hero Arrows
             for (let i = 0; i < 5; i++) {
                 fireProjectile(loader, 'right');
             }
         }
     };
 
-    // Fire first round immediately
     fireVolley();
 
-    // Schedule subsequent rounds
     warInterval = setInterval(fireVolley, 2200);
 }
 
@@ -124,14 +104,12 @@ function revealSuccess() {
     const loader = document.getElementById('war-loader');
     const content = document.getElementById('verse-content');
 
-    // 1. Fade out War
     if (loader) {
         loader.style.transition = 'opacity 0.5s ease';
         loader.style.opacity = '0';
         setTimeout(() => { loader.classList.add('hidden'); }, 500);
     }
 
-    // 2. Pick and Show Verse
     if (gitaData.length > 0) {
         const randomIndex = Math.floor(Math.random() * gitaData.length);
         const verse = gitaData[randomIndex];
@@ -151,9 +129,6 @@ function revealSuccess() {
     }
 }
 
-// =========================================
-// 4. PHYSICS ENGINE (SVG & Off-Screen Logic)
-// =========================================
 function fireProjectile(container, side) {
     if (!container) return;
 
@@ -162,7 +137,6 @@ function fireProjectile(container, side) {
     arrow.classList.add(side === 'left' ? 'arrow-left' : 'arrow-right');
     if (side === 'right') arrow.classList.add('arrow-hero');
 
-    // INSERT REALISTIC SVG ARROW (Pointing Right ->)
     arrow.innerHTML = `
         <svg viewBox="0 0 100 20" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M5 10H78" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
@@ -172,22 +146,16 @@ function fireProjectile(container, side) {
         </svg>
     `;
 
-    // 1. Coordinates: Start/End FAR off-screen (-150px)
     const w = window.innerWidth;
     const h = window.innerHeight;
 
-    // Left Army: Starts far left, lands far right
-    // Right Army: Starts far right, lands far left
     let startX = side === 'left' ? -150 : w + 150;
 
-    // Randomize Start Height (Bottom half of screen)
     let startY = h - (Math.random() * (h * 0.5));
 
-    // End Position: Just past the middle, ensuring they cross screen
     let endX = side === 'left' ? w + 150 : -150;
     let endY = (h * 0.2) + (Math.random() * (h * 0.5));
 
-    // 2. Physics (Bezier Control Point)
     let peakHeight = h * 0.1;
     let controlX = (startX + endX) / 2;
     let controlY = -peakHeight + (Math.random() * 100);
@@ -195,22 +163,20 @@ function fireProjectile(container, side) {
     const pathString = `M ${startX},${startY} Q ${controlX},${controlY} ${endX},${endY}`;
     arrow.style.offsetPath = `path('${pathString}')`;
 
-    // 3. Visual Variation
     const scale = 0.8 + (Math.random() * 0.4);
     arrow.style.transform = `scale(${scale})`;
     arrow.style.zIndex = Math.floor(scale * 100);
 
     container.appendChild(arrow);
 
-    // 4. Animation (Linear, Constant Visibility)
-    const duration = 1500 + (Math.random() * 500); // 1.5s to 2.0s
+    const duration = 1500 + (Math.random() * 500);
 
     const animation = arrow.animate([
         { offsetDistance: '0%' },
         { offsetDistance: '100%' }
     ], {
         duration: duration,
-        easing: 'linear', // Constant speed
+        easing: 'linear',
         fill: 'forwards'
     });
 
@@ -219,19 +185,19 @@ function fireProjectile(container, side) {
     });
 }
 
-// =========================================
-// 5. NAVIGATION LOGIC
-// =========================================
 const views = {
     home: document.getElementById('view-home'),
     chapters: document.getElementById('view-chapters'),
     reader: document.getElementById('view-reader'),
-    install: document.getElementById('view-install')
+    install: document.getElementById('view-install'),
+    about: document.getElementById('view-about'),
+
 };
 
 const btnHome = document.getElementById('btn-home');
 const btnChapters = document.getElementById('btn-chapters');
 const btnInstallView = document.getElementById('btn-install-view');
+const btnAbout = document.getElementById('btn-about')
 
 if (btnHome) {
     btnHome.onclick = () => {
@@ -268,21 +234,23 @@ if (btnInstallView) {
     };
 }
 
+if (btnAbout) {
+    btnAbout.onclick = () => {
+        switchView('about');
+    };
+}
+
 function switchView(viewName) {
-    // Hide all views
     Object.values(views).forEach(el => {
         if (el) el.classList.add('hidden');
     });
 
-    // Show selected view
     if (views[viewName]) views[viewName].classList.remove('hidden');
 
-    // Reset Nav Buttons
-    [btnHome, btnChapters, btnInstallView].forEach(btn => {
+    [btnHome, btnChapters, btnInstallView, btnAbout].forEach(btn => {
         if (btn) btn.classList.remove('active');
     });
 
-    // Set Active State & Button Text
     if (viewName === 'home') {
         btnHome.classList.add('active');
     }
@@ -295,9 +263,23 @@ function switchView(viewName) {
         updateInstallView();
     }
 
-    // TRIGGER FADE IN FOR EVERY VIEW CHANGE
+    else if (viewName === 'about') {
+        btnAbout.classList.add('active');
+    }
+
     fadeContent();
 
+    window.scrollTo(0, 0);
+
+    if (btnAbout) {
+        if (viewName === 'about') {
+            btnAbout.style.display = 'none';
+        } else {
+            btnAbout.style.display = 'inline-block';
+        }
+    }
+
+    fadeContent();
     window.scrollTo(0, 0);
 }
 
@@ -305,14 +287,11 @@ function fadeContent() {
     const main = document.querySelector('main:not(.hidden)');
     if (!main) return;
 
-    // Reset to transparent
     main.style.opacity = '0';
     main.style.transform = 'translateY(10px)';
 
-    // Trigger reflow (optional safety) before applying transition
     void main.offsetWidth;
 
-    // Apply Transition
     main.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
 
     setTimeout(() => {
@@ -321,17 +300,13 @@ function fadeContent() {
     }, 50);
 }
 
-// =========================================
-// 6. CORE FEATURES (Verse Manual Refresh)
-// =========================================
 function showRandomVerse() {
-    // Manual Refresh Logic:
     stopWarRequested = false;
-    startWarLoop(); // Start War
+    startWarLoop();
 
     setTimeout(() => {
         if (gitaData.length > 0) {
-            stopWarRequested = true; // Stop War
+            stopWarRequested = true;
         }
     }, 2000);
 }
@@ -386,9 +361,6 @@ function openChapter(chapterNum) {
     switchView('reader');
 }
 
-// =========================================
-// 7. SHARE & INSTALL LOGIC
-// =========================================
 const btnShare = document.getElementById('btn-share');
 const cardToCapture = document.getElementById('shareable-card-wrapper');
 
@@ -447,7 +419,6 @@ if (btnShare) {
     });
 }
 
-// Detect Device Type
 const isIos = /iPhone|iPad|iPod/.test(navigator.userAgent) && !window.MSStream;
 const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
 const iosInstructions = document.getElementById('instructions-ios');
@@ -470,19 +441,62 @@ function updateInstallView() {
     }
 }
 
-// =========================================
-// FINAL DISPLAY LOGIC
-// =========================================
 const navInstallBtn = document.getElementById('btn-install-view');
 const isMobileDevice = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 
 if (navInstallBtn) {
-    // Only show button if:
-    // 1. It IS a mobile device
-    // 2. AND it is NOT already running as an app (Standalone)
     if (isMobileDevice && !isStandalone) {
         navInstallBtn.style.display = 'block';
     } else {
         navInstallBtn.style.display = 'none';
     }
+}
+
+const contactForm = document.getElementById('contact-form');
+const formStatus = document.getElementById('form-status');
+const submitBtn = document.getElementById('btn-submit-form');
+
+const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzO45oIrllX7zQQ_KaZmpURRJTBv-JShj0vggQ_0GezeMTpslD3Ltg3G5d6my0-abr-ow/exec";
+
+if (contactForm) {
+    contactForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        submitBtn.disabled = true;
+        submitBtn.textContent = "Sending...";
+        submitBtn.style.opacity = "0.75";
+        formStatus.style.display = "none";
+
+        const formData = new FormData(contactForm);
+        
+        fetch(GOOGLE_SCRIPT_URL, {
+            method: 'POST',
+            body: formData,
+            mode: 'no-cors'
+        })
+        .then(() => {
+            contactForm.reset();
+            submitBtn.textContent = "Sent!";
+            submitBtn.style.backgroundColor = "green";
+            
+            setTimeout(() => {
+                submitBtn.disabled = false;
+                submitBtn.textContent = "Send";
+                submitBtn.style.backgroundColor = "var(--accent-gold)";
+                submitBtn.style.opacity = "1";
+
+                formStatus.style.display = "none"; 
+            }, 3000);
+        })
+        .catch(error => {
+            console.error('Error!', error.message);
+            submitBtn.disabled = false;
+            submitBtn.textContent = "Try Again";
+            submitBtn.style.opacity = "1";
+            
+            formStatus.textContent = "Something went wrong. Please try again.";
+            formStatus.style.color = "red";
+            formStatus.style.display = "block";
+        });
+    });
 }
