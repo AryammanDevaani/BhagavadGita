@@ -193,7 +193,8 @@ nav {
     white-space: pre-line;
 }
 
-#translation-text {
+#translation-text,
+.chapter-translation {
     font-family: var(--font-english);
     font-size: 1.4rem;
     color: var(--text-secondary);
@@ -202,6 +203,31 @@ nav {
     margin: 0 auto;
     font-style: italic;
     white-space: pre-line;
+    
+    opacity: 1;
+    filter: blur(0px);
+    transform: scale(1);
+    
+    transition: 
+        height 0.2s ease-out,
+        opacity 0.4s ease 0.1s,
+        filter 0.4s ease 0.1s,
+        transform 0.4s ease 0.1s;
+
+    cursor: pointer;
+    user-select: none;
+    display: block;    
+    overflow: hidden;
+    will-change: height, opacity, filter;
+    
+    padding: 5px 0 10px 0; 
+}
+
+.fading-out {
+    opacity: 0 !important;
+    filter: blur(8px) !important;
+    transform: scale(0.98);
+    transition: opacity 0.2s ease, filter 0.2s ease, transform 0.2s ease !important;
 }
 
 .grid {
@@ -358,7 +384,7 @@ footer a:hover {
 
 #shareable-card-wrapper {
     background-color: var(--bg-color);
-    padding: 3rem 2rem;
+    padding: 3rem 2rem 0rem 2rem;
     border-radius: 0px;
     border: 2px solid transparent;
     width: 100%;
@@ -488,4 +514,110 @@ footer a:hover {
 
 .arrow-hero {
     filter: drop-shadow(0 0 3px var(--accent-gold));
+}
+
+.reader-header {
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+
+    padding: 1rem;
+    margin: 0 -1.5rem 2rem -1.5rem;
+    width: calc(100% + 3rem);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    overflow: visible; 
+}
+
+.reader-header::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 50%; 
+    transform: translateX(-50%);
+    
+    width: 100vw;
+    height: 100%;
+    z-index: -1;
+
+    background-color: var(--bg-color);
+    border-bottom: 1px solid transparent;
+
+    transition: 
+        background-color 0.4s ease, 
+        border-bottom-color 0.4s ease, 
+        box-shadow 0.4s ease,
+        backdrop-filter 0.4s ease,
+        -webkit-backdrop-filter 0.4s ease;
+}
+
+.reader-header.stuck::before {
+    background-color: rgba(249, 247, 242, 0.9);
+    
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    
+    border-bottom: 1px solid rgba(180, 83, 9, 0.15);
+    box-shadow: 0 4px 30px -5px rgba(0, 0, 0, 0.06);
+}
+
+.reader-header.stuck {
+    background: transparent;
+    box-shadow: none;
+    border: none;
+}
+
+.reader-header-text {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+}
+
+.reader-header-sub {
+    font-family: var(--font-english);
+    color: var(--accent-gold);
+    font-size: 1rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.reader-header-title {
+    font-family: var(--font-sanskrit-heading);
+    color: var(--text-primary);
+    font-size: 1.5rem;
+    line-height: 1.2;
+    margin: 0;
+}
+
+.reader-header .back-link {
+    position: absolute;
+    left: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    margin: 0;
+    padding-right: 10px;
+    font-size: 1.8rem;
+    z-index: 101;
+    line-height: 1;
+}
+
+@media (max-width: 768px) {
+    .reader-header {
+        padding: 1rem;
+        margin: 0 -1.5rem 2rem -1.5rem;
+        width: calc(100% + 3rem);
+    }
+
+    .reader-header .back-link {
+        left: 1rem; 
+    }
+    
+    .reader-header-title {
+        font-size: 1.3rem;
+    }
 }

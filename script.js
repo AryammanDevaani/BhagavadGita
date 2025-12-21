@@ -1,8 +1,8 @@
 let gitaData = [];
 let currentVerseObj = null;
-
 let warInterval = null;
 let stopWarRequested = false;
+let chapterObserver = null;
 
 const MY_WEBSITE_URL = "bhgvd.com";
 const APP_TITLE = "Śrīmad Bhagavad Gītā";
@@ -25,8 +25,22 @@ const chapterTitlesSanskrit = [
     "दैवासुरसंपद्विभागयोग", "श्रद्धात्रयविभागयोग", "मोक्षसंन्यासयोग"
 ];
 
-window.addEventListener('DOMContentLoaded', async () => {
+const views = {
+    home: document.getElementById('view-home'),
+    chapters: document.getElementById('view-chapters'),
+    reader: document.getElementById('view-reader'),
+    install: document.getElementById('view-install'),
+    about: document.getElementById('view-about'),
+};
 
+const btnHome = document.getElementById('btn-home');
+const btnChapters = document.getElementById('btn-chapters');
+const btnInstallView = document.getElementById('btn-install-view');
+const btnAbout = document.getElementById('btn-about');
+const btnShare = document.getElementById('btn-share');
+const navInstallBtn = document.getElementById('btn-install-view');
+
+window.addEventListener('DOMContentLoaded', async () => {
     startWarLoop();
 
     try {
@@ -41,13 +55,14 @@ window.addEventListener('DOMContentLoaded', async () => {
             if (cleanSanskrit && !cleanSanskrit.endsWith("।") && !cleanSanskrit.endsWith("॥")) {
                 cleanSanskrit += " ।।";
             }
-            let rawEnglish = item.translation || item.meaning || "Meaning unavailable.";
 
             return {
                 chapter: item.chapter || item.chapter_number || 1,
                 verse: item.verse || item.verse_number || 1,
                 sanskrit: cleanSanskrit,
-                translation: rawEnglish.trim()
+                english: (item.translationEnglish || item.translation || "Meaning unavailable.").trim(),
+                hindi: item.translationHindi || item.hindi || "हिंदी अनुवाद उपलब्ध नहीं है।",
+                gujarati: item.translationGujarati || item.gujarati || "ગુજરાતી અનુવાદ ઉપલબ્ધ નથી."
             };
         });
 
@@ -57,7 +72,6 @@ window.addEventListener('DOMContentLoaded', async () => {
         });
 
         renderChapterList();
-
         stopWarRequested = true;
 
     } catch (error) {
@@ -96,7 +110,6 @@ function startWarLoop() {
     };
 
     fireVolley();
-
     warInterval = setInterval(fireVolley, 2200);
 }
 
@@ -107,7 +120,9 @@ function revealSuccess() {
     if (loader) {
         loader.style.transition = 'opacity 0.5s ease';
         loader.style.opacity = '0';
-        setTimeout(() => { loader.classList.add('hidden'); }, 500);
+        setTimeout(() => {
+            loader.classList.add('hidden');
+        }, 500);
     }
 
     if (gitaData.length > 0) {
@@ -116,7 +131,13 @@ function revealSuccess() {
         currentVerseObj = verse;
 
         document.getElementById('sanskrit-text').textContent = verse.sanskrit;
-        document.getElementById('translation-text').textContent = verse.translation;
+        
+        const textElem = document.getElementById('translation-text');
+        textElem.textContent = verse.english; 
+        textElem.style.height = 'auto';
+        textElem.dataset.lang = "english";
+        textElem.classList.remove('fading-out');
+        
         document.getElementById('verse-reference').textContent = `Chapter ${verse.chapter} • Verse ${verse.verse}`;
 
         if (content) {
@@ -150,9 +171,7 @@ function fireProjectile(container, side) {
     const h = window.innerHeight;
 
     let startX = side === 'left' ? -150 : w + 150;
-
     let startY = h - (Math.random() * (h * 0.5));
-
     let endX = side === 'left' ? w + 150 : -150;
     let endY = (h * 0.2) + (Math.random() * (h * 0.5));
 
@@ -184,20 +203,6 @@ function fireProjectile(container, side) {
         arrow.remove();
     });
 }
-
-const views = {
-    home: document.getElementById('view-home'),
-    chapters: document.getElementById('view-chapters'),
-    reader: document.getElementById('view-reader'),
-    install: document.getElementById('view-install'),
-    about: document.getElementById('view-about'),
-
-};
-
-const btnHome = document.getElementById('btn-home');
-const btnChapters = document.getElementById('btn-chapters');
-const btnInstallView = document.getElementById('btn-install-view');
-const btnAbout = document.getElementById('btn-about')
 
 if (btnHome) {
     btnHome.onclick = () => {
@@ -253,22 +258,17 @@ function switchView(viewName) {
 
     if (viewName === 'home') {
         btnHome.classList.add('active');
-    }
-    else if (viewName === 'chapters' || viewName === 'reader') {
+    } else if (viewName === 'chapters' || viewName === 'reader') {
         btnChapters.classList.add('active');
         btnChapters.textContent = "Chapters";
-    }
-    else if (viewName === 'install') {
+    } else if (viewName === 'install') {
         btnInstallView.classList.add('active');
         updateInstallView();
-    }
-
-    else if (viewName === 'about') {
+    } else if (viewName === 'about') {
         btnAbout.classList.add('active');
     }
 
     fadeContent();
-
     window.scrollTo(0, 0);
 
     if (btnAbout) {
@@ -278,9 +278,6 @@ function switchView(viewName) {
             btnAbout.style.display = 'inline-block';
         }
     }
-
-    fadeContent();
-    window.scrollTo(0, 0);
 }
 
 function fadeContent() {
@@ -332,42 +329,73 @@ function renderChapterList() {
 function openChapter(chapterNum) {
     const chapterVerses = gitaData.filter(v => v.chapter == chapterNum);
     const container = document.getElementById('reader-content');
+    const sanskritName = chapterTitlesSanskrit[chapterNum - 1];
+    const englishMeaning = chapterTitlesEnglish[chapterNum - 1];
+
+    if (chapterObserver) {
+        chapterObserver.disconnect();
+    }
 
     container.innerHTML = `
-        <div style="max-width: 750px; margin: 0 auto; text-align: left;">
+        <div id="sentinel" style="position:absolute; top:0; height:1px; width:100%;"></div>
+
+        <div id="sticky-header" class="reader-header">
             <button onclick="switchView('chapters')" class="back-link" aria-label="Back to Chapters">
                 ←
             </button>
+            <div class="reader-header-text">
+                <span class="reader-header-sub">Chapter ${chapterNum}</span>
+                <span class="reader-header-title">${sanskritName}</span>
+            </div>
         </div>
-
-        <div style="text-align:center; margin-bottom: 4rem; padding-bottom: 2rem;">
-            <span style="color: #B45309; font-family: var(--font-english); font-weight: 700; text-transform: uppercase; font-size: 0.9rem;">Chapter ${chapterNum}</span>
-            <h2 style="font-size: 2.5rem; margin-bottom: 0.5rem;">${chapterTitlesSanskrit[chapterNum - 1]}</h2>
-            <p style="color: #666; font-family: var(--font-english); font-style:italic;">${chapterTitlesEnglish[chapterNum - 1]}</p>
+        
+        <div style="text-align:center; margin-bottom: 3rem;">
+            <p style="color: #666; font-family: var(--font-english); font-style:italic;">
+                ${englishMeaning}
+            </p>
         </div>
     `;
 
     chapterVerses.forEach(v => {
         const div = document.createElement('div');
         div.className = 'verse-block';
+        
         div.innerHTML = `
             <span class="verse-pill" style="margin-bottom: 1.5rem;">Verse ${v.verse}</span>
             <p>${v.sanskrit}</p>
-            <p>${v.translation}</p>
+            <p class="chapter-translation"
+               onclick="handleChapterClick(this)"
+               data-lang="english"
+               data-english="${v.english.replace(/"/g, '&quot;')}"
+               data-hindi="${v.hindi.replace(/"/g, '&quot;')}"
+               data-gujarati="${v.gujarati.replace(/"/g, '&quot;')}">
+               ${v.english}
+            </p>
         `;
         container.appendChild(div);
     });
 
     switchView('reader');
-}
 
-const btnShare = document.getElementById('btn-share');
-const cardToCapture = document.getElementById('shareable-card-wrapper');
+    const header = document.getElementById('sticky-header');
+    const sentinel = document.getElementById('sentinel');
+
+    chapterObserver = new IntersectionObserver((entries) => {
+        if (entries[0].intersectionRatio === 0) {
+            header.classList.add('stuck');
+        } else {
+            header.classList.remove('stuck');
+        }
+    }, { threshold: [0, 1] });
+
+    chapterObserver.observe(sentinel);
+}
 
 if (btnShare) {
     btnShare.addEventListener('click', async () => {
         const originalIcon = btnShare.innerHTML;
         btnShare.classList.add('loading');
+        const cardToCapture = document.getElementById('shareable-card-wrapper');
         const verseRefSpan = document.getElementById('verse-reference');
         const originalRefText = verseRefSpan.textContent;
 
@@ -394,6 +422,8 @@ if (btnShare) {
                         wrapper.style.margin = "0 auto";
                         wrapper.style.border = "0px solid #B45309";
                         wrapper.style.borderRadius = "20px";
+                        
+                        wrapper.style.paddingBottom = "3rem"; 
                     }
                 }
             });
@@ -432,16 +462,13 @@ function updateInstallView() {
 
     if (isStandalone) {
         if (successMsg) successMsg.classList.remove('hidden');
-    }
-    else if (isIos) {
+    } else if (isIos) {
         if (iosInstructions) iosInstructions.classList.remove('hidden');
-    }
-    else {
+    } else {
         if (androidInstructions) androidInstructions.classList.remove('hidden');
     }
 }
 
-const navInstallBtn = document.getElementById('btn-install-view');
 const isMobileDevice = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 
 if (navInstallBtn) {
@@ -455,11 +482,10 @@ if (navInstallBtn) {
 const contactForm = document.getElementById('contact-form');
 const formStatus = document.getElementById('form-status');
 const submitBtn = document.getElementById('btn-submit-form');
-
 const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwBRZqOEoZnnBZB1AYdT7jCLhAzwFIiBN_3Rzd_ethhEfvTDbxl1wFV326l4E-Udkwiqg/exec";
 
 if (contactForm) {
-    contactForm.addEventListener('submit', function(e) {
+    contactForm.addEventListener('submit', function (e) {
         e.preventDefault();
 
         submitBtn.disabled = true;
@@ -468,35 +494,92 @@ if (contactForm) {
         formStatus.style.display = "none";
 
         const formData = new FormData(contactForm);
-        
+
         fetch(GOOGLE_SCRIPT_URL, {
             method: 'POST',
             body: formData,
             mode: 'no-cors'
         })
-        .then(() => {
-            contactForm.reset();
-            submitBtn.textContent = "Sent!";
-            submitBtn.style.backgroundColor = "green";
-            
-            setTimeout(() => {
+            .then(() => {
+                contactForm.reset();
+                submitBtn.textContent = "Sent!";
+                submitBtn.style.backgroundColor = "green";
+
+                setTimeout(() => {
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = "Send";
+                    submitBtn.style.backgroundColor = "var(--accent-gold)";
+                    submitBtn.style.opacity = "1";
+                    formStatus.style.display = "none";
+                }, 3000);
+            })
+            .catch(error => {
+                console.error('Error!', error.message);
                 submitBtn.disabled = false;
-                submitBtn.textContent = "Send";
-                submitBtn.style.backgroundColor = "var(--accent-gold)";
+                submitBtn.textContent = "Try Again";
                 submitBtn.style.opacity = "1";
 
-                formStatus.style.display = "none"; 
-            }, 3000);
-        })
-        .catch(error => {
-            console.error('Error!', error.message);
-            submitBtn.disabled = false;
-            submitBtn.textContent = "Try Again";
-            submitBtn.style.opacity = "1";
-            
-            formStatus.textContent = "Something went wrong. Please try again.";
-            formStatus.style.color = "red";
-            formStatus.style.display = "block";
-        });
+                formStatus.textContent = "Something went wrong. Please try again.";
+                formStatus.style.color = "red";
+                formStatus.style.display = "block";
+            });
     });
+}
+
+const homeTextElem = document.getElementById('translation-text');
+if (homeTextElem) {
+    homeTextElem.addEventListener('click', () => {
+        if (!currentVerseObj) return;
+        animateTextChange(homeTextElem, currentVerseObj);
+    });
+}
+
+window.handleChapterClick = function(el) {
+    const verseData = {
+        english: el.dataset.english,
+        hindi: el.dataset.hindi,
+        gujarati: el.dataset.gujarati
+    };
+    animateTextChange(el, verseData);
+};
+
+function animateTextChange(element, dataObj) {
+    const startHeight = element.offsetHeight;
+    element.style.height = startHeight + 'px';
+
+    element.classList.add('fading-out');
+
+    setTimeout(() => {
+        const currentLang = element.dataset.lang || "english";
+        let nextLang, nextText;
+
+        if (currentLang === "english") {
+            nextLang = "hindi";
+            nextText = dataObj.hindi;
+        } else if (currentLang === "hindi") {
+            nextLang = "gujarati";
+            nextText = dataObj.gujarati;
+        } else {
+            nextLang = "english";
+            nextText = dataObj.english;
+        }
+
+        element.textContent = nextText;
+        element.dataset.lang = nextLang;
+
+        element.style.height = 'auto'; 
+        const targetHeight = element.offsetHeight;
+        
+        element.style.height = startHeight + 'px'; 
+        
+        void element.offsetHeight; 
+
+        element.style.height = targetHeight + 'px';
+        element.classList.remove('fading-out');
+
+        setTimeout(() => {
+            element.style.height = 'auto';
+        }, 400); // Matches CSS
+
+    }, 200); // Matches CSS
 }
