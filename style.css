@@ -166,7 +166,6 @@ nav {
 .verse-meta {
     display: flex;
     justify-content: center;
-    pointer-events: none;
 }
 
 #verse-reference,
@@ -181,6 +180,15 @@ nav {
     font-style: italic;
     border: 1px solid rgba(180, 83, 9, 0.1);
     display: inline-block;
+    transition: all 0.2s ease;
+}
+
+#verse-reference {
+    cursor: pointer;
+}
+
+#verse-reference:hover {
+    background-color: rgba(180, 83, 9, 0.1);
 }
 
 #sanskrit-text {
@@ -207,9 +215,12 @@ nav {
     font-style: italic;
     white-space: pre-line;
     text-align: center;
+
     cursor: pointer;
     user-select: none;
+
     padding: 5px 0 10px 0;
+
     opacity: 1;
     filter: blur(0px);
     transform: scale(1);

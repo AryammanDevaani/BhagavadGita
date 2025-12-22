@@ -41,6 +41,7 @@ const btnAbout = document.getElementById('btn-about');
 const btnShare = document.getElementById('btn-share');
 const navInstallBtn = document.getElementById('btn-install-view');
 const btnChaptersBack = document.getElementById('btn-chapters-back');
+const verseRefBtn = document.getElementById('verse-reference');
 
 window.addEventListener('DOMContentLoaded', async () => {
     startWarLoop();
@@ -84,7 +85,7 @@ window.addEventListener('DOMContentLoaded', async () => {
 function startWarLoop() {
     const loader = document.getElementById('war-loader');
     const content = document.getElementById('verse-content');
-    
+
     if (content) content.classList.add('hidden');
     if (loader) {
         loader.classList.remove('hidden');
@@ -119,17 +120,17 @@ function calculateBoxMetrics(targetElement, translations) {
     ghost.style.top = '-9999px';
     ghost.style.left = '-9999px';
     ghost.style.visibility = 'hidden';
-    ghost.style.height = 'auto'; 
-    ghost.style.width = targetElement.offsetWidth + 'px'; 
+    ghost.style.height = 'auto';
+    ghost.style.width = targetElement.offsetWidth + 'px';
     ghost.style.padding = window.getComputedStyle(targetElement).padding;
-    ghost.style.fontSize = '1.4rem'; 
+    ghost.style.fontSize = '1.4rem';
     ghost.classList.remove('hidden');
-    
+
     document.body.appendChild(ghost);
 
-    const baseSize = 1.4; 
-    const maxSize = 2.4; 
-    
+    const baseSize = 1.4;
+    const maxSize = 2.4;
+
     ghost.textContent = translations.english;
     const hEng = ghost.offsetHeight;
 
@@ -144,7 +145,7 @@ function calculateBoxMetrics(targetElement, translations) {
     function getOptimalSize(height) {
         if (height >= maxHeight) return baseSize + 'rem';
         let ratio = maxHeight / height;
-        let newSize = baseSize * Math.sqrt(ratio); 
+        let newSize = baseSize * Math.sqrt(ratio);
         if (newSize > maxSize) newSize = maxSize;
         return newSize.toFixed(2) + 'rem';
     }
@@ -185,14 +186,14 @@ function revealSuccess() {
 
         document.getElementById('sanskrit-text').textContent = verse.sanskrit;
         const textElem = document.getElementById('translation-text');
-        
+
         document.getElementById('verse-reference').textContent = `Chapter ${verse.chapter} • Verse ${verse.verse}`;
 
         if (content) {
             content.classList.remove('hidden');
-            
+
             const metrics = calculateBoxMetrics(textElem, verse);
-            
+
             textElem.style.height = metrics.height;
             textElem.style.display = 'flex';
             textElem.style.alignItems = 'center';
@@ -202,10 +203,10 @@ function revealSuccess() {
             textElem.dataset.fsHin = metrics.fs.hindi;
             textElem.dataset.fsGuj = metrics.fs.gujarati;
 
-            textElem.textContent = verse.english; 
+            textElem.textContent = verse.english;
             textElem.style.fontSize = metrics.fs.english;
             textElem.dataset.lang = "english";
-            
+
             textElem.classList.remove('fading-out');
 
             content.animate([
@@ -274,7 +275,7 @@ if (btnHome) {
     btnHome.onclick = () => {
         const isHomeActive = !views.home.classList.contains('hidden');
         if (isHomeActive) {
-            smoothScrollTop(1500); 
+            smoothScrollTop(1500);
         } else {
             switchView('home');
         }
@@ -297,6 +298,14 @@ if (btnChapters) {
 if (btnChaptersBack) {
     btnChaptersBack.onclick = () => {
         smoothScrollTop(1500);
+    };
+}
+
+if (verseRefBtn) {
+    verseRefBtn.onclick = () => {
+        if (currentVerseObj) {
+            openChapter(currentVerseObj.chapter, currentVerseObj.verse);
+        }
     };
 }
 
@@ -336,13 +345,13 @@ function switchView(viewName) {
     } else if (viewName === 'chapters' || viewName === 'reader') {
         btnChapters.classList.add('active');
         btnChapters.textContent = "Chapters";
-        
+
         if (viewName === 'chapters') {
-             const header = document.getElementById('chapters-sticky-header');
-             const sentinel = document.getElementById('chapters-sentinel');
-             
-             if(header && sentinel) {
-                 chaptersObserver = new IntersectionObserver((entries) => {
+            const header = document.getElementById('chapters-sticky-header');
+            const sentinel = document.getElementById('chapters-sentinel');
+
+            if (header && sentinel) {
+                chaptersObserver = new IntersectionObserver((entries) => {
                     if (entries[0].intersectionRatio === 0) {
                         header.classList.add('stuck');
                     } else {
@@ -350,7 +359,7 @@ function switchView(viewName) {
                     }
                 }, { threshold: [0, 1] });
                 chaptersObserver.observe(sentinel);
-             }
+            }
         }
 
     } else if (viewName === 'install') {
@@ -418,9 +427,9 @@ function renderChapterList() {
     }
 }
 
-window.handleReaderBack = function() {
+window.handleReaderBack = function () {
     const header = document.getElementById('sticky-header');
-    
+
     if (header && header.classList.contains('stuck')) {
         smoothScrollTop(1500);
     } else {
@@ -428,7 +437,7 @@ window.handleReaderBack = function() {
     }
 };
 
-function openChapter(chapterNum) {
+function openChapter(chapterNum, highlightVerse = null) {
     const chapterVerses = gitaData.filter(v => v.chapter == chapterNum);
     const container = document.getElementById('reader-content');
     const sanskritName = chapterTitlesSanskrit[chapterNum - 1];
@@ -458,7 +467,8 @@ function openChapter(chapterNum) {
     chapterVerses.forEach(v => {
         const div = document.createElement('div');
         div.className = 'verse-block';
-        
+        div.id = `verse-${v.verse}`;
+
         div.innerHTML = `
             <span class="verse-pill" style="margin-bottom: 1.5rem;">Verse ${v.verse}</span>
             <p class="sanskrit-verse-line">${v.sanskrit}</p>
@@ -475,7 +485,16 @@ function openChapter(chapterNum) {
     });
 
     switchView('reader');
-    
+
+    if (highlightVerse) {
+        setTimeout(() => {
+            const targetEl = document.getElementById(`verse-${highlightVerse}`);
+            if (targetEl) {
+                targetEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        }, 100);
+    }
+
     const verseBlocks = document.querySelectorAll('.verse-block .chapter-translation');
     verseBlocks.forEach(el => {
         const data = {
@@ -488,13 +507,13 @@ function openChapter(chapterNum) {
         el.style.display = 'flex';
         el.style.alignItems = 'center';
         el.style.justifyContent = 'center';
-        
+
         el.dataset.fsEng = metrics.fs.english;
         el.dataset.fsHin = metrics.fs.hindi;
         el.dataset.fsGuj = metrics.fs.gujarati;
-        
+
         el.style.fontSize = metrics.fs.english;
-        
+
         el.classList.remove('fading-out');
     });
 
@@ -544,11 +563,11 @@ if (btnShare) {
                         wrapper.style.margin = "0 auto";
                         wrapper.style.border = "0px solid #B45309";
                         wrapper.style.borderRadius = "20px";
-                        wrapper.style.paddingBottom = "3rem"; 
+                        wrapper.style.paddingBottom = "3rem";
                     }
-                    if(text) {
-                         text.style.height = 'auto';
-                         text.style.display = 'block';
+                    if (text) {
+                        text.style.height = 'auto';
+                        text.style.display = 'block';
                     }
                 }
             });
@@ -659,7 +678,7 @@ if (homeTextElem) {
     });
 }
 
-window.handleChapterClick = function(el) {
+window.handleChapterClick = function (el) {
     const verseData = {
         english: el.dataset.english,
         hindi: el.dataset.hindi,
