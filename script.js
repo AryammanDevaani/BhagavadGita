@@ -3,7 +3,7 @@ let currentVerseObj = null;
 let warInterval = null;
 let stopWarRequested = false;
 let chapterObserver = null;
-let chaptersObserver = null;
+let chaptersObserver = null; 
 
 const MY_WEBSITE_URL = "bhgvd.com";
 const APP_TITLE = "Śrīmad Bhagavad Gītā";
@@ -85,7 +85,7 @@ window.addEventListener('DOMContentLoaded', async () => {
 function startWarLoop() {
     const loader = document.getElementById('war-loader');
     const content = document.getElementById('verse-content');
-
+    
     if (content) content.classList.add('hidden');
     if (loader) {
         loader.classList.remove('hidden');
@@ -120,17 +120,17 @@ function calculateBoxMetrics(targetElement, translations) {
     ghost.style.top = '-9999px';
     ghost.style.left = '-9999px';
     ghost.style.visibility = 'hidden';
-    ghost.style.height = 'auto';
-    ghost.style.width = targetElement.offsetWidth + 'px';
+    ghost.style.height = 'auto'; 
+    ghost.style.width = targetElement.offsetWidth + 'px'; 
     ghost.style.padding = window.getComputedStyle(targetElement).padding;
-    ghost.style.fontSize = '1.4rem';
+    ghost.style.fontSize = '1.4rem'; 
     ghost.classList.remove('hidden');
-
+    
     document.body.appendChild(ghost);
 
-    const baseSize = 1.4;
-    const maxSize = 2.4;
-
+    const baseSize = 1.4; 
+    const maxSize = 2.4; 
+    
     ghost.textContent = translations.english;
     const hEng = ghost.offsetHeight;
 
@@ -145,7 +145,7 @@ function calculateBoxMetrics(targetElement, translations) {
     function getOptimalSize(height) {
         if (height >= maxHeight) return baseSize + 'rem';
         let ratio = maxHeight / height;
-        let newSize = baseSize * Math.sqrt(ratio);
+        let newSize = baseSize * Math.sqrt(ratio); 
         if (newSize > maxSize) newSize = maxSize;
         return newSize.toFixed(2) + 'rem';
     }
@@ -186,14 +186,14 @@ function revealSuccess() {
 
         document.getElementById('sanskrit-text').textContent = verse.sanskrit;
         const textElem = document.getElementById('translation-text');
-
+        
         document.getElementById('verse-reference').textContent = `Chapter ${verse.chapter} • Verse ${verse.verse}`;
 
         if (content) {
             content.classList.remove('hidden');
-
+            
             const metrics = calculateBoxMetrics(textElem, verse);
-
+            
             textElem.style.height = metrics.height;
             textElem.style.display = 'flex';
             textElem.style.alignItems = 'center';
@@ -203,10 +203,10 @@ function revealSuccess() {
             textElem.dataset.fsHin = metrics.fs.hindi;
             textElem.dataset.fsGuj = metrics.fs.gujarati;
 
-            textElem.textContent = verse.english;
+            textElem.textContent = verse.english; 
             textElem.style.fontSize = metrics.fs.english;
             textElem.dataset.lang = "english";
-
+            
             textElem.classList.remove('fading-out');
 
             content.animate([
@@ -275,7 +275,7 @@ if (btnHome) {
     btnHome.onclick = () => {
         const isHomeActive = !views.home.classList.contains('hidden');
         if (isHomeActive) {
-            smoothScrollTop(1500);
+            smoothScrollTop(1000); 
         } else {
             switchView('home');
         }
@@ -288,7 +288,7 @@ if (btnChapters) {
         const isChaptersActive = !views.chapters.classList.contains('hidden');
 
         if (isReading || isChaptersActive) {
-            smoothScrollTop(1500);
+            smoothScrollTop(1000);
         } else {
             switchView('chapters');
         }
@@ -297,7 +297,7 @@ if (btnChapters) {
 
 if (btnChaptersBack) {
     btnChaptersBack.onclick = () => {
-        smoothScrollTop(1500);
+        smoothScrollTop(1000);
     };
 }
 
@@ -313,7 +313,7 @@ if (btnInstallView) {
     btnInstallView.onclick = () => {
         const isInstallActive = !views.install.classList.contains('hidden');
         if (isInstallActive) {
-            smoothScrollTop(1500);
+            smoothScrollTop(1000);
         } else {
             switchView('install');
         }
@@ -345,13 +345,13 @@ function switchView(viewName) {
     } else if (viewName === 'chapters' || viewName === 'reader') {
         btnChapters.classList.add('active');
         btnChapters.textContent = "Chapters";
-
+        
         if (viewName === 'chapters') {
-            const header = document.getElementById('chapters-sticky-header');
-            const sentinel = document.getElementById('chapters-sentinel');
-
-            if (header && sentinel) {
-                chaptersObserver = new IntersectionObserver((entries) => {
+             const header = document.getElementById('chapters-sticky-header');
+             const sentinel = document.getElementById('chapters-sentinel');
+             
+             if(header && sentinel) {
+                 chaptersObserver = new IntersectionObserver((entries) => {
                     if (entries[0].intersectionRatio === 0) {
                         header.classList.add('stuck');
                     } else {
@@ -359,7 +359,7 @@ function switchView(viewName) {
                     }
                 }, { threshold: [0, 1] });
                 chaptersObserver.observe(sentinel);
-            }
+             }
         }
 
     } else if (viewName === 'install') {
@@ -427,11 +427,11 @@ function renderChapterList() {
     }
 }
 
-window.handleReaderBack = function () {
+window.handleReaderBack = function() {
     const header = document.getElementById('sticky-header');
-
+    
     if (header && header.classList.contains('stuck')) {
-        smoothScrollTop(1500);
+        smoothScrollTop(1000);
     } else {
         switchView('chapters');
     }
@@ -468,9 +468,19 @@ function openChapter(chapterNum, highlightVerse = null) {
         const div = document.createElement('div');
         div.className = 'verse-block';
         div.id = `verse-${v.verse}`;
-
+        
         div.innerHTML = `
-            <span class="verse-pill" style="margin-bottom: 1.5rem;">Verse ${v.verse}</span>
+            <button class="verse-pill" 
+                    aria-label="Share Verse ${v.verse}"
+                    onclick="captureVerseImage(this, ${v.chapter}, ${v.verse})">
+                <svg class="share-icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path>
+                    <polyline points="16 6 12 2 8 6"></polyline>
+                    <line x1="12" y1="2" x2="12" y2="15"></line>
+                </svg>
+                <span>Verse ${v.verse}</span>
+            </button>
+
             <p class="sanskrit-verse-line">${v.sanskrit}</p>
             <p class="chapter-translation"
                onclick="handleChapterClick(this)"
@@ -485,16 +495,7 @@ function openChapter(chapterNum, highlightVerse = null) {
     });
 
     switchView('reader');
-
-    if (highlightVerse) {
-        setTimeout(() => {
-            const targetEl = document.getElementById(`verse-${highlightVerse}`);
-            if (targetEl) {
-                targetEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            }
-        }, 100);
-    }
-
+    
     const verseBlocks = document.querySelectorAll('.verse-block .chapter-translation');
     verseBlocks.forEach(el => {
         const data = {
@@ -507,15 +508,23 @@ function openChapter(chapterNum, highlightVerse = null) {
         el.style.display = 'flex';
         el.style.alignItems = 'center';
         el.style.justifyContent = 'center';
-
+        
         el.dataset.fsEng = metrics.fs.english;
         el.dataset.fsHin = metrics.fs.hindi;
         el.dataset.fsGuj = metrics.fs.gujarati;
-
+        
         el.style.fontSize = metrics.fs.english;
-
         el.classList.remove('fading-out');
     });
+
+    if (highlightVerse) {
+        requestAnimationFrame(() => {
+            const targetEl = document.getElementById(`verse-${highlightVerse}`);
+            if (targetEl) {
+                targetEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        });
+    }
 
     const header = document.getElementById('sticky-header');
     const sentinel = document.getElementById('sentinel');
@@ -530,6 +539,71 @@ function openChapter(chapterNum, highlightVerse = null) {
 
     chapterObserver.observe(sentinel);
 }
+
+window.captureVerseImage = async function(btnElement, chapter, verse) {
+    const originalContent = btnElement.innerHTML;
+    btnElement.classList.add('loading');
+    
+    const verseObj = gitaData.find(v => v.chapter == chapter && v.verse == verse);
+    if (!verseObj) {
+        btnElement.classList.remove('loading');
+        return;
+    }
+
+    const sanskrit = verseObj.sanskrit;
+    const english = verseObj.english;
+    
+    const headerText = `${APP_TITLE} \u00A0|\u00A0 Chapter ${chapter} • Verse ${verse}`;
+
+    const tempContainer = document.createElement('div');
+    tempContainer.style.position = 'fixed';
+    tempContainer.style.top = '-9999px';
+    tempContainer.style.left = '-9999px';
+    tempContainer.style.width = '800px'; 
+    tempContainer.style.zIndex = '-100';
+    tempContainer.style.backgroundColor = '#F9F7F2';
+    
+    tempContainer.innerHTML = `
+        <div id="temp-share-wrapper" style="width: 550px; padding: 3rem 2rem 3rem 2rem; border-radius: 20px; text-align: center; font-family: 'Playfair Display', serif; background-color: #F9F7F2;">
+            <div style="margin-bottom: 3rem;">
+                <span style="background-color: #FFF7ED; color: #B45309; padding: 0.6rem 1.5rem; border-radius: 100px; font-size: 0.9rem; font-weight: 700; font-style: italic; border: 1px solid rgba(180, 83, 9, 0.1); display: inline-block;">
+                    ${headerText}
+                </span>
+            </div>
+            <h1 style="font-family: 'Arya', sans-serif; font-size: 2.8rem; line-height: 1.5; color: #2D2D2D; font-weight: 400; margin: 2rem auto; white-space: pre-wrap;">${sanskrit}</h1>
+            <p style="font-family: 'Playfair Display', serif; font-size: 1.4rem; color: #666666; line-height: 1.8; margin: 0 auto; font-style: italic; white-space: pre-line;">${english}</p>
+            <div style="font-family: 'Rozha One', serif; color: #B45309; font-size: 1.25rem; margin-top: 3rem; opacity: 0.7;">${MY_WEBSITE_URL}</div>
+        </div>
+    `;
+    
+    document.body.appendChild(tempContainer);
+
+    try {
+        const canvas = await html2canvas(tempContainer.querySelector('#temp-share-wrapper'), {
+            scale: 2, 
+            useCORS: true,
+            backgroundColor: "#F9F7F2"
+        });
+
+        const dataURL = canvas.toDataURL('image/png');
+        const blob = await (await fetch(dataURL)).blob();
+        const file = new File([blob], 'Verse.png', { type: 'image/png' });
+
+        if (navigator.canShare && navigator.canShare({ files: [file] })) {
+            await navigator.share({ files: [file], title: APP_TITLE });
+        } else {
+            const a = document.createElement('a');
+            a.download = 'Verse.png';
+            a.href = dataURL;
+            a.click();
+        }
+    } catch (err) {
+        console.error("Share failed", err);
+    } finally {
+        document.body.removeChild(tempContainer);
+        btnElement.classList.remove('loading');
+    }
+};
 
 if (btnShare) {
     btnShare.addEventListener('click', async () => {
@@ -563,11 +637,11 @@ if (btnShare) {
                         wrapper.style.margin = "0 auto";
                         wrapper.style.border = "0px solid #B45309";
                         wrapper.style.borderRadius = "20px";
-                        wrapper.style.paddingBottom = "3rem";
+                        wrapper.style.paddingBottom = "3rem"; 
                     }
-                    if (text) {
-                        text.style.height = 'auto';
-                        text.style.display = 'block';
+                    if(text) {
+                            text.style.height = 'auto';
+                            text.style.display = 'block';
                     }
                 }
             });
@@ -580,7 +654,7 @@ if (btnShare) {
                 await navigator.share({ files: [file], title: APP_TITLE });
             } else {
                 const a = document.createElement('a');
-                a.download = 'verse.png';
+                a.download = 'Verse.png';
                 a.href = dataURL;
                 a.click();
             }
@@ -678,7 +752,7 @@ if (homeTextElem) {
     });
 }
 
-window.handleChapterClick = function (el) {
+window.handleChapterClick = function(el) {
     const verseData = {
         english: el.dataset.english,
         hindi: el.dataset.hindi,
@@ -714,7 +788,7 @@ function switchLanguage(element, dataObj) {
 
         element.classList.remove('fading-out');
 
-    }, 600);
+    }, 600); 
 }
 
 function smoothScrollTop(duration = 1000) {
@@ -725,11 +799,9 @@ function smoothScrollTop(duration = 1000) {
         const timeElapsed = currentTime - startTime;
         const progress = Math.min(timeElapsed / duration, 1);
 
-        const ease = progress < 0.5
-            ? 4 * progress * progress * progress
-            : 1 - Math.pow(-2 * progress + 2, 3) / 2;
+        const ease = 1 - Math.pow(1 - progress, 5);
 
-        window.scrollTo(0, start * (1 - ease));
+        window.scroll(0, start * (1 - ease));
 
         if (timeElapsed < duration) {
             requestAnimationFrame(animation);
