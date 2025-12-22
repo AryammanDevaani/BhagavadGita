@@ -216,11 +216,10 @@ nav {
     /* Layout properties managed by JS for box filling */
     padding: 5px 0 10px 0;
 
-    /* SLOW ANIMATION RESTORED */
+    /* SLOW ANIMATION RESTORED (0.6s) */
     opacity: 1;
     filter: blur(0px);
     transform: scale(1);
-    /* Changed 0.2s -> 0.6s */
     transition: opacity 0.6s ease, filter 0.6s ease, transform 0.6s ease;
 }
 
@@ -237,13 +236,15 @@ nav {
     width: 100%;
 }
 
+/* UPDATED: REMOVED BOX-SHADOW */
 .chapter-card {
     background: var(--card-bg);
     padding: 2rem;
     border-radius: 16px;
     cursor: pointer;
     transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
-    box-shadow: var(--shadow-soft);
+    /* box-shadow: var(--shadow-soft); <--- REMOVED */
+    box-shadow: none;
     text-align: center;
     border: 1px solid rgba(0, 0, 0, 0.03);
     min-height: 180px;
@@ -252,9 +253,11 @@ nav {
     justify-content: center;
 }
 
+/* UPDATED: REMOVED HOVER SHADOW */
 .chapter-card:hover {
     transform: translateY(-8px);
-    box-shadow: var(--shadow-hover);
+    /* box-shadow: var(--shadow-hover); <--- REMOVED */
+    box-shadow: none;
     border-color: var(--accent-light);
 }
 
@@ -458,7 +461,7 @@ footer a:hover {
     filter: drop-shadow(0 0 3px var(--accent-gold));
 }
 
-/* READER HEADER CSS */
+/* --- UPDATED READER HEADER CSS (FULL WIDTH) --- */
 
 .reader-header {
     position: -webkit-sticky;
@@ -466,11 +469,15 @@ footer a:hover {
     top: 0;
     z-index: 100;
 
-    padding: 1rem 0;
+    /* Added horizontal padding for spacing from screen edges */
+    padding: 1rem 2rem; 
+    
     margin: 0 auto 2rem auto;
 
     width: 100%;
-    max-width: 900px;
+    
+    /* Changed to 100% to fill screen */
+    max-width: 100%; 
 
     display: flex;
     align-items: center;
@@ -537,7 +544,8 @@ footer a:hover {
 
 .reader-header .back-link {
     position: absolute;
-    left: 0;
+    /* Adjusted left position to align with new padding */
+    left: 2rem; 
     top: 50%;
     transform: translateY(-50%);
     margin: 0;
@@ -545,6 +553,24 @@ footer a:hover {
     font-size: 1.8rem;
     z-index: 101;
     line-height: 1;
+}
+
+/* --- SCROLL TO TOP ARROW SPECIFIC CSS --- */
+#btn-chapters-back {
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+/* Updated to 0.5 to match the back-link style */
+.reader-header.stuck #btn-chapters-back {
+    opacity: 0.5; 
+    pointer-events: auto;
+}
+
+/* Ensure hover goes to 100% */
+.reader-header.stuck #btn-chapters-back:hover {
+    opacity: 1;
 }
 
 /* MEDIA QUERIES */
@@ -562,15 +588,16 @@ footer a:hover {
         max-width: 100%;
     }
 
+    /* Update Header for mobile */
     .reader-header {
-        padding: 1rem 0;
+        padding: 1rem 1rem; /* Smaller padding on mobile */
         margin: 0 auto 2rem auto;
-        width: 94% !important;
+        width: 100% !important;
         max-width: 100%;
     }
 
     .reader-header .back-link {
-        left: 0;
+        left: 1rem; /* Align left with padding */
     }
 
     .reader-header-title {

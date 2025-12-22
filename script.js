@@ -3,6 +3,7 @@ let currentVerseObj = null;
 let warInterval = null;
 let stopWarRequested = false;
 let chapterObserver = null;
+let chaptersObserver = null; 
 
 const MY_WEBSITE_URL = "bhgvd.com";
 const APP_TITLE = "Śrīmad Bhagavad Gītā";
@@ -39,6 +40,7 @@ const btnInstallView = document.getElementById('btn-install-view');
 const btnAbout = document.getElementById('btn-about');
 const btnShare = document.getElementById('btn-share');
 const navInstallBtn = document.getElementById('btn-install-view');
+const btnChaptersBack = document.getElementById('btn-chapters-back');
 
 window.addEventListener('DOMContentLoaded', async () => {
     startWarLoop();
@@ -111,7 +113,6 @@ function startWarLoop() {
     warInterval = setInterval(fireVolley, 2200);
 }
 
-/* --- THE "FILL BOX" LOGIC --- */
 function calculateBoxMetrics(targetElement, translations) {
     const ghost = targetElement.cloneNode(true);
     ghost.style.position = 'absolute';
@@ -126,8 +127,8 @@ function calculateBoxMetrics(targetElement, translations) {
     
     document.body.appendChild(ghost);
 
-    const baseSize = 1.4; // rem
-    const maxSize = 2.4; // max rem
+    const baseSize = 1.4; 
+    const maxSize = 2.4; 
     
     ghost.textContent = translations.english;
     const hEng = ghost.offsetHeight;
@@ -293,6 +294,12 @@ if (btnChapters) {
     };
 }
 
+if (btnChaptersBack) {
+    btnChaptersBack.onclick = () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+}
+
 if (btnInstallView) {
     btnInstallView.onclick = () => {
         const isInstallActive = !views.install.classList.contains('hidden');
@@ -321,11 +328,33 @@ function switchView(viewName) {
         if (btn) btn.classList.remove('active');
     });
 
+    // Reset observers when switching
+    if (chapterObserver) chapterObserver.disconnect();
+    if (chaptersObserver) chaptersObserver.disconnect();
+
     if (viewName === 'home') {
         btnHome.classList.add('active');
     } else if (viewName === 'chapters' || viewName === 'reader') {
         btnChapters.classList.add('active');
         btnChapters.textContent = "Chapters";
+        
+        // NEW LOGIC FOR CHAPTERS HEADER
+        if (viewName === 'chapters') {
+             const header = document.getElementById('chapters-sticky-header');
+             const sentinel = document.getElementById('chapters-sentinel');
+             
+             if(header && sentinel) {
+                 chaptersObserver = new IntersectionObserver((entries) => {
+                    if (entries[0].intersectionRatio === 0) {
+                        header.classList.add('stuck');
+                    } else {
+                        header.classList.remove('stuck');
+                    }
+                }, { threshold: [0, 1] });
+                chaptersObserver.observe(sentinel);
+             }
+        }
+
     } else if (viewName === 'install') {
         btnInstallView.classList.add('active');
         updateInstallView();

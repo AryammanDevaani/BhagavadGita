@@ -94,12 +94,18 @@
     </main>
 
     <main id="view-chapters" class="container hidden">
-        <div class="header-section" style="text-align:center; margin-bottom:3rem;">
-            <h2 style="font-family:var(--font-english); font-weight: 700; font-size:3rem; margin-bottom:0.5rem; color:var(--text-primary);">
-                The 18 Chapters
-            </h2>
-            <p style="color:var(--text-secondary); font-style:italic;">of wisdom.</p>
+        <div id="chapters-sentinel" style="position:absolute; top:0; height:1px; width:100%;"></div>
+
+        <div id="chapters-sticky-header" class="reader-header">
+            <button id="btn-chapters-back" class="back-link" aria-label="Scroll to Top">
+                ↑
+            </button>
+            <div class="reader-header-text">
+                <h2 class="reader-header-title" style="font-family: var(--font-english); font-size: 1.5rem; line-height: 1.2;">The 18 Chapters</h2>
+                <p style="color:var(--text-secondary); font-style:italic; margin-top: 0.5rem;">of wisdom.</p>
+            </div>
         </div>
+
         <div id="chapter-grid" class="grid">
         </div>
     </main>
